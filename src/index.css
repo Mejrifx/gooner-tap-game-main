@@ -111,6 +111,19 @@ All colors MUST be HSL.
     transform: scale(0.95);
   }
 
+/* Remove default focus ring/outline for interactive image/buttons when desired */
+.penguin-tap,
+button,
+img[alt="GOONER"] {
+  outline: none;
+}
+.penguin-tap:focus,
+button:focus,
+img[alt="GOONER"]:focus {
+  outline: none;
+  box-shadow: none;
+}
+
   .penguin-mouth-open {
     transform: scaleY(1.2);
   }

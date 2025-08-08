@@ -279,16 +279,54 @@ const PenguinTap = () => {
           />
         </div>
 
-        {/* Center placeholder (content moved above image for mobile request) */}
-        <div className="justify-self-center" />
+        {/* Center (desktop only): counter + leaderboard */}
+        <div className="justify-self-center hidden md:block">
+          <div className="flex items-center gap-4 lg:gap-6">
+            <div className="text-center">
+              <div className="text-sm lg:text-base text-muted-foreground">Total Taps</div>
+              <div className={`text-2xl lg:text-3xl font-extrabold text-primary ${showPopEffect ? 'pop-animation' : ''}`}>{globalTaps.toLocaleString()}</div>
+            </div>
+            <div className="relative leaderboard-container">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowLeaderboard(!showLeaderboard)}
+                className="flex items-center gap-2 text-sm lg:text-base px-3 lg:px-4 py-2"
+              >
+                Global Taps Leaderboard
+                <ChevronDown size={14} className={`transition-transform ${showLeaderboard ? 'rotate-180' : ''}`} />
+              </Button>
+              {showLeaderboard && (
+                <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 z-50 bg-card border border-border rounded-lg shadow-xl w-96 max-h-96 overflow-y-auto">
+                  <div className="p-4 border-b border-border">
+                    <h3 className="font-semibold text-foreground text-base lg:text-lg">Country Leaderboard</h3>
+                  </div>
+                  <div className="py-2">
+                    {leaderboard.map((entry, index) => (
+                      <div key={index} className="flex items-center justify-between px-5 py-3 hover:bg-muted/50">
+                        <div className="flex items-center gap-3">
+                          <span className="text-sm lg:text-base font-medium text-muted-foreground">{index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`}</span>
+                          <span className="text-sm lg:text-base font-medium text-foreground">
+                            {entry.country} <span className="ml-2 text-muted-foreground">{entry.countryName}</span>
+                          </span>
+                        </div>
+                        <span className="text-sm lg:text-base font-bold text-primary">{entry.taps.toLocaleString()}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
 
-        {/* Right: flag + actions (icons on mobile, labeled on desktop) */}
-        <div className="flex items-center gap-2 sm:gap-3 justify-self-end">
+        {/* Right: flag + actions (icons/text on mobile, labeled on desktop) */}
+        <div className="flex items-center gap-2 sm:gap-3 justify-self-end flex-wrap max-w-[60vw] md:max-w-none">
           <span className="text-2xl" title="Your location">{countryFlag}</span>
-          {/* Mobile: icon buttons */}
-          <div className="flex md:hidden items-center gap-2">
-            <Button aria-label="Copy CA" variant="ghost" size="icon" onClick={copyCA}>
-              <Copy size={16} />
+          {/* Mobile: text for Copy CA & About; icons for X/Telegram */}
+          <div className="flex md:hidden items-center gap-2 flex-wrap">
+            <Button aria-label="Copy CA" variant="ghost" size="sm" onClick={copyCA} className="flex items-center gap-1 focus:outline-none focus:ring-0">
+              <Copy size={16} /> <span className="text-xs">COPY CA</span>
             </Button>
             <Button aria-label="X" variant="ghost" size="icon" onClick={() => window.open('https://x.com/PurgyPengoon', '_blank')}>
               <span className="text-lg">𝕏</span>
@@ -296,23 +334,23 @@ const PenguinTap = () => {
             <Button aria-label="Telegram" variant="ghost" size="icon" onClick={() => window.open('https://t.me/gooneronabs', '_blank')}>
               <Send size={16} />
             </Button>
-            <Button aria-label="About Gooner" variant="ghost" size="icon" onClick={() => window.open('https://www.purgypengoon.com/', '_blank')}>
-              <ExternalLink size={16} />
+            <Button aria-label="About Gooner" variant="ghost" size="sm" onClick={() => window.open('https://www.purgypengoon.com/', '_blank')} className="flex items-center gap-1 focus:outline-none focus:ring-0">
+              <span className="text-xs">ABOUT</span> <ExternalLink size={14} />
             </Button>
           </div>
           {/* Desktop: labeled buttons */}
           <div className="hidden md:flex items-center gap-2">
-            <Button variant="ghost" size="sm" onClick={copyCA} className="flex items-center gap-1">
-              <Copy size={14} /> Copy CA
+            <Button variant="ghost" size="sm" onClick={copyCA} className="flex items-center gap-1 focus:outline-none focus:ring-0">
+              <Copy size={14} /> <span>COPY CA</span>
             </Button>
-            <Button variant="ghost" size="sm" onClick={() => window.open('https://x.com/PurgyPengoon', '_blank')} className="flex items-center gap-1">
+            <Button variant="ghost" size="sm" onClick={() => window.open('https://x.com/PurgyPengoon', '_blank')} className="flex items-center gap-1 focus:outline-none focus:ring-0">
               <span className="text-lg">𝕏</span>
             </Button>
-            <Button variant="ghost" size="sm" onClick={() => window.open('https://t.me/gooneronabs', '_blank')} className="flex items-center gap-1">
+            <Button variant="ghost" size="sm" onClick={() => window.open('https://t.me/gooneronabs', '_blank')} className="flex items-center gap-1 focus:outline-none focus:ring-0">
               <Send size={16} />
             </Button>
-            <Button variant="ghost" size="sm" onClick={() => window.open('https://www.purgypengoon.com/', '_blank')} className="flex items-center gap-1">
-              About Gooner <ExternalLink size={14} />
+            <Button variant="ghost" size="sm" onClick={() => window.open('https://www.purgypengoon.com/', '_blank')} className="flex items-center gap-1 focus:outline-none focus:ring-0">
+              <span>ABOUT GOONER</span> <ExternalLink size={14} />
             </Button>
           </div>
         </div>
@@ -329,8 +367,8 @@ const PenguinTap = () => {
           onPointerUp={(e) => e.isPrimary && handlePressEnd()}
           onPointerCancel={(e) => e.isPrimary && handlePressEnd()}
           onPointerLeave={(e) => e.isPrimary && handlePressEnd()}
-          className={`select-none w-[88vw] max-w-[720px] h-auto transition-transform ${isPressed ? 'glow-effect' : ''}`}
-          style={{ touchAction: 'manipulation' }}
+          className={`select-none h-auto transition-transform ${isPressed ? 'glow-effect' : ''}`}
+          style={{ touchAction: 'manipulation', width: 'calc(100vw - 2px)', maxWidth: '1200px' }}
         />
         {/* Top overlay above the image: total taps + leaderboard */}
         <div className="absolute top-2 sm:top-4 left-1/2 -translate-x-1/2 z-30">

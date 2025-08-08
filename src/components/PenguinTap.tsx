@@ -279,8 +279,8 @@ const PenguinTap = () => {
           />
         </div>
 
-        {/* Center (desktop only): counter + leaderboard */}
-        <div className="justify-self-center hidden md:block">
+        {/* Center (desktop only): counter + leaderboard, forced centered */}
+        <div className="hidden md:block md:absolute md:left-1/2 md:-translate-x-1/2">
           <div className="flex items-center gap-4 lg:gap-6">
             <div className="text-center">
               <div className="text-sm lg:text-base text-muted-foreground">Total Taps</div>
@@ -367,7 +367,7 @@ const PenguinTap = () => {
           onPointerUp={(e) => e.isPrimary && handlePressEnd()}
           onPointerCancel={(e) => e.isPrimary && handlePressEnd()}
           onPointerLeave={(e) => e.isPrimary && handlePressEnd()}
-          className={`select-none h-auto transition-transform ${isPressed ? 'glow-effect' : ''}`}
+          className={`select-none h-auto transition-transform focus:outline-none focus-visible:outline-none active:outline-none focus:shadow-none active:shadow-none`}
           style={{
             touchAction: 'manipulation',
             width: 'min(90vw, 1100px)',

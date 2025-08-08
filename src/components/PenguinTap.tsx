@@ -279,53 +279,8 @@ const PenguinTap = () => {
           />
         </div>
 
-        {/* Center */}
-        <div className="justify-self-center">
-          <div className="flex items-center gap-4 sm:gap-6">
-          <div className="text-center">
-              <div className="text-xs sm:text-sm md:text-base text-muted-foreground">Total Taps</div>
-              <div className={`text-xl sm:text-2xl md:text-3xl font-extrabold text-primary ${showPopEffect ? 'pop-animation' : ''}`}>
-              {globalTaps.toLocaleString()}
-            </div>
-          </div>
-
-          <div className="relative leaderboard-container">
-            <Button
-              variant="outline"
-              size="default"
-              onClick={() => setShowLeaderboard(!showLeaderboard)}
-                className="flex items-center gap-2 text-xs sm:text-sm md:text-base px-3 sm:px-4 py-2"
-            >
-                <span className="sm:hidden">Leaderboard</span>
-                <span className="hidden sm:inline">Global Taps Leaderboard</span>
-              <ChevronDown size={14} className={`transition-transform ${showLeaderboard ? 'rotate-180' : ''}`} />
-            </Button>
-
-            {showLeaderboard && (
-              <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 z-50 bg-card border border-border rounded-lg shadow-xl w-80 sm:w-96 max-w-[90vw] max-h-96 overflow-y-auto">
-                <div className="p-4 border-b border-border">
-                  <h3 className="font-semibold text-foreground text-base md:text-lg">Country Leaderboard</h3>
-                </div>
-                <div className="py-2">
-                  {leaderboard.map((entry, index) => (
-                    <div key={index} className="flex items-center justify-between px-4 sm:px-5 py-3 hover:bg-muted/50">
-                      <div className="flex items-center gap-2 sm:gap-3">
-                        <span className="text-xs sm:text-sm md:text-base font-medium text-muted-foreground">
-                          {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`}
-                        </span>
-                        <span className="text-xs sm:text-sm md:text-base font-medium text-foreground">
-                          {entry.country} <span className="ml-2 text-muted-foreground">{entry.countryName}</span>
-                        </span>
-                      </div>
-                      <span className="text-xs sm:text-sm md:text-base font-bold text-primary">{entry.taps.toLocaleString()}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-          </div>
-        </div>
+        {/* Center placeholder (content moved above image for mobile request) */}
+        <div className="justify-self-center" />
 
         {/* Right: flag always; actions hidden on mobile */}
         <div className="flex items-center gap-2 sm:gap-3 justify-self-end">
@@ -349,21 +304,9 @@ const PenguinTap = () => {
 
       {/* Main Content */}
       <div
-        className="relative flex-1 flex flex-col items-center justify-center p-4 select-none cursor-pointer"
+        className="relative flex-1 flex flex-col items-center justify-center p-4 select-none"
         role="button"
         tabIndex={0}
-        onPointerDown={(e) => {
-          if (e.isPrimary) handlePressStart();
-        }}
-        onPointerUp={(e) => {
-          if (e.isPrimary) handlePressEnd();
-        }}
-        onPointerCancel={(e) => {
-          if (e.isPrimary) handlePressEnd();
-        }}
-        onPointerLeave={(e) => {
-          if (e.isPrimary) handlePressEnd();
-        }}
         onKeyDown={(e) => {
           if (e.key === ' ' || e.key === 'Enter') {
             e.preventDefault();
@@ -386,11 +329,69 @@ const PenguinTap = () => {
           touchAction: 'manipulation',
         }}
       >
-        {/* Counter/leaderboard moved into navbar */}
-        {/* Tap area only. */}
+        {/* Top overlay above the image: total taps + leaderboard */}
+        <div className="absolute top-2 sm:top-4 left-1/2 -translate-x-1/2 z-30">
+          <div className="flex items-center gap-3 sm:gap-6">
+            <div className="text-center">
+              <div className="text-xs sm:text-sm md:text-base text-muted-foreground">Total Taps</div>
+              <div className={`text-xl sm:text-2xl md:text-3xl font-extrabold text-primary ${showPopEffect ? 'pop-animation' : ''}`}>
+                {globalTaps.toLocaleString()}
+              </div>
+            </div>
+            <div className="relative leaderboard-container">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowLeaderboard(!showLeaderboard)}
+                className="flex items-center gap-2 text-xs sm:text-sm md:text-base px-2.5 sm:px-4 py-1.5"
+              >
+                <span className="sm:hidden">Leaderboard</span>
+                <span className="hidden sm:inline">Global Taps Leaderboard</span>
+                <ChevronDown size={14} className={`transition-transform ${showLeaderboard ? 'rotate-180' : ''}`} />
+              </Button>
+              {showLeaderboard && (
+                <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 z-50 bg-card border border-border rounded-lg shadow-xl w-80 sm:w-96 max-w-[90vw] max-h-96 overflow-y-auto">
+                  <div className="p-4 border-b border-border">
+                    <h3 className="font-semibold text-foreground text-base md:text-lg">Country Leaderboard</h3>
+                  </div>
+                  <div className="py-2">
+                    {leaderboard.map((entry, index) => (
+                      <div key={index} className="flex items-center justify-between px-4 sm:px-5 py-3 hover:bg-muted/50">
+                        <div className="flex items-center gap-2 sm:gap-3">
+                          <span className="text-xs sm:text-sm md:text-base font-medium text-muted-foreground">
+                            {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`}
+                          </span>
+                          <span className="text-xs sm:text-sm md:text-base font-medium text-foreground">
+                            {entry.country} <span className="ml-2 text-muted-foreground">{entry.countryName}</span>
+                          </span>
+                        </div>
+                        <span className="text-xs sm:text-sm md:text-base font-bold text-primary">{entry.taps.toLocaleString()}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
 
-        {/* Mobile-only bottom actions under the image */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 sm:hidden">
+        {/* Tap zone is only the circular button centered over the image */}
+        <button
+          aria-label="Tap GOONER"
+          onPointerDown={(e) => e.isPrimary && handlePressStart()}
+          onPointerUp={(e) => e.isPrimary && handlePressEnd()}
+          onPointerCancel={(e) => e.isPrimary && handlePressEnd()}
+          onPointerLeave={(e) => e.isPrimary && handlePressEnd()}
+          className={`penguin-tap relative w-48 h-48 sm:w-56 sm:h-56 rounded-full border-4 border-primary/60 shadow-xl bg-transparent ${isPressed ? 'glow-effect' : ''}`}
+          style={{
+            // position in center
+            top: '50%',
+            transform: 'translateY(-50%)',
+          }}
+        />
+
+        {/* Mobile-only: buttons in navbar now; remove bottom buttons */}
+        {/* <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 sm:hidden"> ... </div> */}
           <div className="flex items-center gap-3">
             <Button variant="secondary" size="default" className="flex items-center gap-1" onClick={copyCA}>
               <Copy size={16} /> Copy CA

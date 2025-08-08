@@ -327,43 +327,23 @@ const PenguinTap = () => {
           </div>
         </div>
 
-        {/* Right: actions */}
+        {/* Right: flag always; actions hidden on mobile */}
         <div className="flex items-center gap-2 sm:gap-3 justify-self-end">
           <span className="text-2xl" title="Your location">{countryFlag}</span>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={copyCA}
-            className="flex items-center gap-1"
-          >
-            <Copy size={14} />
-            Copy CA
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => window.open('https://x.com/PurgyPengoon', '_blank')}
-            className="flex items-center gap-1"
-          >
-            <span className="text-lg">𝕏</span>
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => window.open('https://t.me/gooneronabs', '_blank')}
-            className="flex items-center gap-1"
-          >
-            <Send size={16} />
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => window.open('https://www.purgypengoon.com/', '_blank')}
-            className="hidden sm:flex items-center gap-1"
-          >
-            About Gooner
-            <ExternalLink size={14} />
-          </Button>
+          <div className="hidden md:flex items-center gap-2">
+            <Button variant="ghost" size="sm" onClick={copyCA} className="flex items-center gap-1">
+              <Copy size={14} /> Copy CA
+            </Button>
+            <Button variant="ghost" size="sm" onClick={() => window.open('https://x.com/PurgyPengoon', '_blank')} className="flex items-center gap-1">
+              <span className="text-lg">𝕏</span>
+            </Button>
+            <Button variant="ghost" size="sm" onClick={() => window.open('https://t.me/gooneronabs', '_blank')} className="flex items-center gap-1">
+              <Send size={16} />
+            </Button>
+            <Button variant="ghost" size="sm" onClick={() => window.open('https://www.purgypengoon.com/', '_blank')} className="flex items-center gap-1">
+              About Gooner <ExternalLink size={14} />
+            </Button>
+          </div>
         </div>
       </nav>
 
@@ -409,8 +389,23 @@ const PenguinTap = () => {
         {/* Counter/leaderboard moved into navbar */}
         {/* Tap area only. */}
 
-        {/* Penguin Tap Area */}
-        {/* entire area is tap zone now; removed inner button */}
+        {/* Mobile-only bottom actions under the image */}
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 sm:hidden">
+          <div className="flex items-center gap-3">
+            <Button variant="secondary" size="default" className="flex items-center gap-1" onClick={copyCA}>
+              <Copy size={16} /> Copy CA
+            </Button>
+            <Button variant="secondary" size="icon" onClick={() => window.open('https://x.com/PurgyPengoon', '_blank')}>
+              <span className="text-lg">𝕏</span>
+            </Button>
+            <Button variant="secondary" size="icon" onClick={() => window.open('https://t.me/gooneronabs', '_blank')}>
+              <Send size={16} />
+            </Button>
+            <Button variant="secondary" size="default" className="flex items-center gap-1" onClick={() => window.open('https://www.purgypengoon.com/', '_blank')}>
+              About <ExternalLink size={14} />
+            </Button>
+          </div>
+        </div>
       </div>
 
       {/* Global Counter and Leaderboard */}

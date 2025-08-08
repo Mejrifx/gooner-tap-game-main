@@ -56,16 +56,8 @@ const PenguinTap = () => {
     }, 300);
   }, [flushIncrements]);
 
-  // Initialize service worker for PWA and get country flag
+  // Initialize geolocation for country flag (no SW registration in prod to avoid stale caches)
   useEffect(() => {
-    // Only register service worker in production to avoid dev cache conflicts
-    if (import.meta.env.PROD && 'serviceWorker' in navigator) {
-      navigator.serviceWorker
-        .register('/sw.js')
-        .then(() => console.log('Service Worker registered'))
-        .catch(() => console.log('Service Worker registration failed'));
-    }
-
     // Get country code and flag based on user's location
     fetch('https://ipapi.co/json/')
       .then((response) => response.json())
@@ -248,11 +240,66 @@ const PenguinTap = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-100 to-blue-300 dark:from-blue-900 dark:to-blue-700 flex flex-col">
       {/* Navigation Bar */}
-      <nav className="flex items-center justify-between p-4 bg-card/20 backdrop-blur-sm">
-        <h1 className="text-2xl md:text-3xl font-bold text-primary">
-          GOONER TapTap
-        </h1>
-        <div className="flex items-center gap-3">
+      <nav className="relative flex items-center p-4 bg-card/20 backdrop-blur-sm">
+        {/* Left: logo */}
+        <div className="flex items-center">
+          <img
+            src="/gooner-mouth-open.png"
+            alt="GOONER"
+            className="h-10 md:h-12 lg:h-14 w-auto select-none transition-transform duration-150 hover:scale-105 hover:drop-shadow-lg"
+            draggable={false}
+          />
+        </div>
+
+        {/* Center: absolute centered */}
+        <div className="absolute left-1/2 -translate-x-1/2">
+          <div className="flex items-center gap-6">
+          <div className="text-center">
+            <div className="text-sm md:text-base text-muted-foreground">Total Taps</div>
+            <div className={`text-2xl md:text-3xl font-extrabold text-primary ${showPopEffect ? 'pop-animation' : ''}`}>
+              {globalTaps.toLocaleString()}
+            </div>
+          </div>
+
+          <div className="relative leaderboard-container">
+            <Button
+              variant="outline"
+              size="default"
+              onClick={() => setShowLeaderboard(!showLeaderboard)}
+              className="flex items-center gap-2 text-sm md:text-base px-4 py-2"
+            >
+              Global Taps Leaderboard
+              <ChevronDown size={14} className={`transition-transform ${showLeaderboard ? 'rotate-180' : ''}`} />
+            </Button>
+
+            {showLeaderboard && (
+              <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 z-50 bg-card border border-border rounded-lg shadow-xl w-96 max-h-96 overflow-y-auto">
+                <div className="p-4 border-b border-border">
+                  <h3 className="font-semibold text-foreground text-base md:text-lg">Country Leaderboard</h3>
+                </div>
+                <div className="py-2">
+                  {leaderboard.map((entry, index) => (
+                    <div key={index} className="flex items-center justify-between px-5 py-3 hover:bg-muted/50">
+                      <div className="flex items-center gap-3">
+                        <span className="text-sm md:text-base font-medium text-muted-foreground">
+                          {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`}
+                        </span>
+                        <span className="text-sm md:text-base font-medium text-foreground">
+                          {entry.country} <span className="ml-2 text-muted-foreground">{entry.countryName}</span>
+                        </span>
+                      </div>
+                      <span className="text-sm md:text-base font-bold text-primary">{entry.taps.toLocaleString()}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+          </div>
+        </div>
+
+        {/* Right: actions (push to right via ml-auto) */}
+        <div className="flex items-center gap-3 ml-auto">
           <span className="text-2xl" title="Your location">{countryFlag}</span>
           <Button
             variant="ghost"
@@ -266,7 +313,7 @@ const PenguinTap = () => {
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => window.open('https://twitter.com', '_blank')}
+            onClick={() => window.open('https://x.com/PurgyPengoon', '_blank')}
             className="flex items-center gap-1"
           >
             <span className="text-lg">𝕏</span>
@@ -293,7 +340,7 @@ const PenguinTap = () => {
 
       {/* Main Content */}
       <div
-        className="flex-1 flex flex-col items-center justify-center p-4 select-none cursor-pointer"
+        className="relative flex-1 flex flex-col items-center justify-center p-4 select-none cursor-pointer"
         role="button"
         tabIndex={0}
         onMouseDown={handlePressStart}
@@ -323,59 +370,15 @@ const PenguinTap = () => {
           height: '100%',
         }}
       >
-        {/* Center counter removed intentionally. Tap area only. */}
+        {/* Counter/leaderboard moved into navbar */}
+        {/* Tap area only. */}
 
         {/* Penguin Tap Area */}
         {/* entire area is tap zone now; removed inner button */}
       </div>
 
       {/* Global Counter and Leaderboard */}
-      <div className="fixed bottom-0 left-0 right-0 bg-card/90 backdrop-blur-sm border-t border-border p-5">
-        <div className="flex items-center justify-center gap-6">
-          <div className="text-center">
-            <div className="text-base md:text-lg text-muted-foreground">Total Taps</div>
-            <div className={`text-3xl md:text-4xl font-extrabold text-primary ${showPopEffect ? 'pop-animation' : ''}`}>
-              {globalTaps.toLocaleString()}
-            </div>
-          </div>
-          
-          {/* Leaderboard Dropdown */}
-          <div className="relative leaderboard-container">
-            <Button
-              variant="outline"
-              size="default"
-              onClick={() => setShowLeaderboard(!showLeaderboard)}
-              className="flex items-center gap-2 text-sm md:text-base px-4 py-2"
-            >
-              Global Taps Leaderboard
-              <ChevronDown size={14} className={`transition-transform ${showLeaderboard ? 'rotate-180' : ''}`} />
-            </Button>
-            
-            {showLeaderboard && (
-              <div className="absolute bottom-full mb-3 left-1/2 transform -translate-x-1/2 z-50 bg-card border border-border rounded-lg shadow-xl w-96 max-h-96 overflow-y-auto">
-                <div className="p-4 border-b border-border">
-                  <h3 className="font-semibold text-foreground text-base md:text-lg">Country Leaderboard</h3>
-                </div>
-                <div className="py-2">
-                  {leaderboard.map((entry, index) => (
-                    <div key={index} className="flex items-center justify-between px-5 py-3 hover:bg-muted/50">
-                      <div className="flex items-center gap-3">
-                        <span className="text-sm md:text-base font-medium text-muted-foreground">
-                          {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`}
-                        </span>
-                        <span className="text-sm md:text-base font-medium text-foreground">
-                          {entry.country} <span className="ml-2 text-muted-foreground">{entry.countryName}</span>
-                        </span>
-                      </div>
-                      <span className="text-sm md:text-base font-bold text-primary">{entry.taps.toLocaleString()}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
+      {/* bottom bar removed; overlay moved to top */}
 
       {/* Placeholder for Solana integration */}
       {/* 

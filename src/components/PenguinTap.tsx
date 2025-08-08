@@ -378,7 +378,6 @@ const PenguinTap = () => {
         />
 
         {/* Mobile-only: bottom buttons removed; all actions live in navbar */}
-        </div>
       </div>
 
       {/* Global Counter and Leaderboard */}

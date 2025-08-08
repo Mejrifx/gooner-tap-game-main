@@ -1,13 +1,15 @@
-# GOONER TapTap - Penguin Tap-to-Earn Game
+# GOONER TapTap - Tap-to-Earn Penguin Game
 
-A mobile-first Progressive Web App (PWA) inspired by Popcat Solana, themed around the GOONER meme coin with penguin characters.
+Mobile-first tap-to-earn PWA. Tap GOONER the penguin to rack up taps and climb the global leaderboard.
+
+![GOONER Preview](public/gooner-mouth-closed.png)
 
 ## 🎮 Features
 
-- **Tap-to-Earn Gameplay**: Tap the penguin to rack up pops
+- **Tap-to-Earn Gameplay**: Tap the penguin to rack up taps
 - **Mobile-First Design**: Optimized for touch devices with haptic feedback
 - **PWA Support**: Installable on mobile devices, works offline
-- **Penguin Animations**: Interactive penguin with mouth opening animation
+- **Penguin Animations**: Background toggles between closed/open mouth on press/hold
 - **Sound Effects**: Audio feedback using Web Audio API
 - **GOONER Integration**: Placeholder for Solana token integration
 
@@ -61,14 +63,7 @@ const playSound = () => {
 ```
 
 ### Contract Address
-Update the contract address in `PenguinTap.tsx`:
-
-```jsx
-// Replace placeholder CA
-<div className="font-mono text-xs break-all">
-  YOUR_ACTUAL_CONTRACT_ADDRESS_HERE
-</div>
-```
+Current CA (copyable in navbar): `0xdC70311f4B19774828aA4a57520a7153AF5E58a5`
 
 ## 🔗 Solana Integration
 
@@ -81,10 +76,10 @@ npm install @solana/web3.js @solana/wallet-adapter-react @solana/wallet-adapter-
 
 ## 🎯 Deployment
 
-### Vercel Deployment
+### Netlify Deployment
 1. Push to GitHub repository
-2. Connect to Vercel
-3. Deploy automatically
+2. Connect to Netlify
+3. Build command: `npm run build` | Publish directory: `dist`
 
 ### Manual Build
 ```bash

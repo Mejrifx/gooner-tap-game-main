@@ -110,12 +110,14 @@ const PenguinTap = () => {
     void loadInitial();
 
     // Realtime subscriptions
+    const realtimeReceivedRef = { current: false } as { current: boolean };
     const channel = supabase
       .channel('realtime-taps')
       .on(
         'postgres_changes',
         { event: 'UPDATE', schema: 'public', table: 'global_state', filter: 'id=eq.1' },
         (payload) => {
+          realtimeReceivedRef.current = true;
           const newTotal = (payload.new as any)?.total_taps;
           if (typeof newTotal === 'number') setGlobalTaps(newTotal);
         }
@@ -124,6 +126,7 @@ const PenguinTap = () => {
         'postgres_changes',
         { event: '*', schema: 'public', table: 'country_taps' },
         () => {
+          realtimeReceivedRef.current = true;
           // Refresh leaderboard on any change
           supabase
             .from('country_taps')
@@ -145,8 +148,28 @@ const PenguinTap = () => {
       )
       .subscribe();
 
+    // Fallback polling if realtime doesn't kick in
+    let stopPolling: (() => void) | null = null;
+    const fallbackTimeout = window.setTimeout(() => {
+      if (!realtimeReceivedRef.current) {
+        const interval = window.setInterval(async () => {
+          const [{ data: g }, { data: lb }] = await Promise.all([
+            supabase.from('global_state').select('total_taps').eq('id', 1).maybeSingle(),
+            supabase.from('country_taps').select('country_code, taps').order('taps', { ascending: false }).limit(20),
+          ]);
+          if ((g as any)?.total_taps != null) setGlobalTaps(Number((g as any).total_taps));
+          if (Array.isArray(lb)) {
+            setLeaderboard(lb.map((r) => ({ country: countryCodeToFlag(r.country_code), countryName: getCountryName(r.country_code), taps: Number(r.taps) })));
+          }
+        }, 2000);
+        stopPolling = () => window.clearInterval(interval);
+      }
+    }, 5000);
+
     return () => {
       supabase.removeChannel(channel);
+      window.clearTimeout(fallbackTimeout);
+      if (stopPolling) stopPolling();
     };
   }, []);
 

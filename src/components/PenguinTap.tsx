@@ -282,9 +282,25 @@ const PenguinTap = () => {
         {/* Center placeholder (content moved above image for mobile request) */}
         <div className="justify-self-center" />
 
-        {/* Right: flag always; actions hidden on mobile */}
+        {/* Right: flag + actions (icons on mobile, labeled on desktop) */}
         <div className="flex items-center gap-2 sm:gap-3 justify-self-end">
           <span className="text-2xl" title="Your location">{countryFlag}</span>
+          {/* Mobile: icon buttons */}
+          <div className="flex md:hidden items-center gap-2">
+            <Button aria-label="Copy CA" variant="ghost" size="icon" onClick={copyCA}>
+              <Copy size={16} />
+            </Button>
+            <Button aria-label="X" variant="ghost" size="icon" onClick={() => window.open('https://x.com/PurgyPengoon', '_blank')}>
+              <span className="text-lg">𝕏</span>
+            </Button>
+            <Button aria-label="Telegram" variant="ghost" size="icon" onClick={() => window.open('https://t.me/gooneronabs', '_blank')}>
+              <Send size={16} />
+            </Button>
+            <Button aria-label="About Gooner" variant="ghost" size="icon" onClick={() => window.open('https://www.purgypengoon.com/', '_blank')}>
+              <ExternalLink size={16} />
+            </Button>
+          </div>
+          {/* Desktop: labeled buttons */}
           <div className="hidden md:flex items-center gap-2">
             <Button variant="ghost" size="sm" onClick={copyCA} className="flex items-center gap-1">
               <Copy size={14} /> Copy CA
@@ -303,18 +319,19 @@ const PenguinTap = () => {
       </nav>
 
       {/* Main Content */}
-      <div
-        className="relative flex-1 flex flex-col items-center justify-center p-4 select-none"
-        style={{
-          backgroundImage: `url(${isPressed ? '/gooner-mouth-open.png' : '/gooner-mouth-closed.png'})`,
-          backgroundSize: 'contain',
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center',
-          width: '100%',
-          height: '100%',
-          touchAction: 'manipulation',
-        }}
-      >
+      <div className="relative flex-1 flex flex-col items-center justify-center p-4 select-none">
+        {/* Gooner image as an interactive element */}
+        <img
+          src={isPressed ? '/gooner-mouth-open.png' : '/gooner-mouth-closed.png'}
+          alt="GOONER"
+          draggable={false}
+          onPointerDown={(e) => e.isPrimary && handlePressStart()}
+          onPointerUp={(e) => e.isPrimary && handlePressEnd()}
+          onPointerCancel={(e) => e.isPrimary && handlePressEnd()}
+          onPointerLeave={(e) => e.isPrimary && handlePressEnd()}
+          className={`select-none w-[88vw] max-w-[720px] h-auto transition-transform ${isPressed ? 'glow-effect' : ''}`}
+          style={{ touchAction: 'manipulation' }}
+        />
         {/* Top overlay above the image: total taps + leaderboard */}
         <div className="absolute top-2 sm:top-4 left-1/2 -translate-x-1/2 z-30">
           <div className="flex items-center gap-3 sm:gap-6">
@@ -360,22 +377,6 @@ const PenguinTap = () => {
             </div>
           </div>
         </div>
-
-        {/* Tap zone is only the circular button centered over the image */}
-        <button
-          aria-label="Tap GOONER"
-          onPointerDown={(e) => e.isPrimary && handlePressStart()}
-          onPointerUp={(e) => e.isPrimary && handlePressEnd()}
-          onPointerCancel={(e) => e.isPrimary && handlePressEnd()}
-          onPointerLeave={(e) => e.isPrimary && handlePressEnd()}
-          className={`penguin-tap relative w-48 h-48 sm:w-56 sm:h-56 rounded-full border-4 border-primary/60 shadow-xl bg-transparent ${isPressed ? 'glow-effect' : ''}`}
-          style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-          }}
-        />
 
         {/* Mobile-only: bottom buttons removed; all actions live in navbar */}
       </div>

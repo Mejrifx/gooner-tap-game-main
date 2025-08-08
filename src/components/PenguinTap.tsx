@@ -305,20 +305,6 @@ const PenguinTap = () => {
       {/* Main Content */}
       <div
         className="relative flex-1 flex flex-col items-center justify-center p-4 select-none"
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === ' ' || e.key === 'Enter') {
-            e.preventDefault();
-            handlePressStart();
-          }
-        }}
-        onKeyUp={(e) => {
-          if (e.key === ' ' || e.key === 'Enter') {
-            e.preventDefault();
-            handlePressEnd();
-          }
-        }}
         style={{
           backgroundImage: `url(${isPressed ? '/gooner-mouth-open.png' : '/gooner-mouth-closed.png'})`,
           backgroundSize: 'contain',
@@ -384,28 +370,14 @@ const PenguinTap = () => {
           onPointerLeave={(e) => e.isPrimary && handlePressEnd()}
           className={`penguin-tap relative w-48 h-48 sm:w-56 sm:h-56 rounded-full border-4 border-primary/60 shadow-xl bg-transparent ${isPressed ? 'glow-effect' : ''}`}
           style={{
-            // position in center
+            position: 'absolute',
             top: '50%',
-            transform: 'translateY(-50%)',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
           }}
         />
 
-        {/* Mobile-only: buttons in navbar now; remove bottom buttons */}
-        {/* <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 sm:hidden"> ... </div> */}
-          <div className="flex items-center gap-3">
-            <Button variant="secondary" size="default" className="flex items-center gap-1" onClick={copyCA}>
-              <Copy size={16} /> Copy CA
-            </Button>
-            <Button variant="secondary" size="icon" onClick={() => window.open('https://x.com/PurgyPengoon', '_blank')}>
-              <span className="text-lg">𝕏</span>
-            </Button>
-            <Button variant="secondary" size="icon" onClick={() => window.open('https://t.me/gooneronabs', '_blank')}>
-              <Send size={16} />
-            </Button>
-            <Button variant="secondary" size="default" className="flex items-center gap-1" onClick={() => window.open('https://www.purgypengoon.com/', '_blank')}>
-              About <ExternalLink size={14} />
-            </Button>
-          </div>
+        {/* Mobile-only: bottom buttons removed; all actions live in navbar */}
         </div>
       </div>
 

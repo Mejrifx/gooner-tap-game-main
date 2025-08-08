@@ -363,6 +363,8 @@ const PenguinTap = () => {
           src={isPressed ? '/gooner-mouth-open.png' : '/gooner-mouth-closed.png'}
           alt="GOONER"
           draggable={false}
+          onContextMenu={(e) => e.preventDefault()}
+          onDragStart={(e) => e.preventDefault()}
           onPointerDown={(e) => e.isPrimary && handlePressStart()}
           onPointerUp={(e) => e.isPrimary && handlePressEnd()}
           onPointerCancel={(e) => e.isPrimary && handlePressEnd()}

@@ -138,6 +138,16 @@ button:focus-visible {
   box-shadow: none !important;
 }
 
+/* Prevent long-press save/copy/select on mobile for the GOONER image */
+img[alt="GOONER"] {
+  -webkit-touch-callout: none; /* iOS Safari: disable image callout */
+  -webkit-user-select: none;   /* Safari */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* IE10+/Edge */
+  user-select: none;           /* Standard */
+  -webkit-user-drag: none;     /* Disable image drag in WebKit */
+}
+
   .penguin-mouth-open {
     transform: scaleY(1.2);
   }

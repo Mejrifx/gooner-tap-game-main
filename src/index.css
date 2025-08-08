@@ -103,6 +103,13 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
   }
 
+  html, body, #root {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  * { -webkit-tap-highlight-color: transparent; }
+
   .penguin-tap {
     transition: transform 0.1s ease-out;
   }

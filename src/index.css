@@ -131,6 +131,13 @@ img[alt="GOONER"]:focus {
   box-shadow: none;
 }
 
+/* Remove default focus ring for keyboard/touch across browsers */
+img[alt="GOONER"]:focus-visible,
+button:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
   .penguin-mouth-open {
     transform: scaleY(1.2);
   }

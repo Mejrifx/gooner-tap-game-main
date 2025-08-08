@@ -268,7 +268,7 @@ const PenguinTap = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-100 to-blue-300 dark:from-blue-900 dark:to-blue-700 flex flex-col">
       {/* Navigation Bar */}
-      <nav className="relative grid grid-cols-3 items-center p-3 md:p-4 bg-card/20 backdrop-blur-sm">
+      <nav className="relative grid grid-cols-[auto_1fr_auto] items-center gap-2 px-3 py-2 md:px-4 md:py-3 bg-card/20 backdrop-blur-sm">
         {/* Left: logo */}
         <div className="flex items-center">
           <img
@@ -320,13 +320,13 @@ const PenguinTap = () => {
           </div>
         </div>
 
-        {/* Right: flag + actions (icons/text on mobile, labeled on desktop) */}
-        <div className="flex items-center gap-2 sm:gap-3 justify-self-end flex-wrap max-w-[60vw] md:max-w-none">
+        {/* Right: flag + actions (side-by-side clean) */}
+        <div className="flex items-center gap-2 sm:gap-3 justify-self-end flex-nowrap overflow-x-auto whitespace-nowrap">
           <span className="text-2xl" title="Your location">{countryFlag}</span>
           {/* Mobile: text for Copy CA & About; icons for X/Telegram */}
-          <div className="flex md:hidden items-center gap-2 flex-wrap">
+          <div className="flex md:hidden items-center gap-2 flex-nowrap">
             <Button aria-label="Copy CA" variant="ghost" size="sm" onClick={copyCA} className="flex items-center gap-1 focus:outline-none focus:ring-0">
-              <Copy size={16} /> <span className="text-xs">COPY CA</span>
+              <Copy size={16} /> <span className="text-[10px] sm:text-xs">COPY CA</span>
             </Button>
             <Button aria-label="X" variant="ghost" size="icon" onClick={() => window.open('https://x.com/PurgyPengoon', '_blank')}>
               <span className="text-lg">𝕏</span>
@@ -335,7 +335,7 @@ const PenguinTap = () => {
               <Send size={16} />
             </Button>
             <Button aria-label="About Gooner" variant="ghost" size="sm" onClick={() => window.open('https://www.purgypengoon.com/', '_blank')} className="flex items-center gap-1 focus:outline-none focus:ring-0">
-              <span className="text-xs">ABOUT</span> <ExternalLink size={14} />
+              <span className="text-[10px] sm:text-xs">ABOUT</span> <ExternalLink size={14} />
             </Button>
           </div>
           {/* Desktop: labeled buttons */}
@@ -368,10 +368,15 @@ const PenguinTap = () => {
           onPointerCancel={(e) => e.isPrimary && handlePressEnd()}
           onPointerLeave={(e) => e.isPrimary && handlePressEnd()}
           className={`select-none h-auto transition-transform ${isPressed ? 'glow-effect' : ''}`}
-          style={{ touchAction: 'manipulation', width: 'calc(100vw - 2px)', maxWidth: '1200px' }}
+          style={{
+            touchAction: 'manipulation',
+            width: 'min(90vw, 1100px)',
+            maxHeight: 'calc(100vh - 120px)',
+            objectFit: 'contain'
+          }}
         />
-        {/* Top overlay above the image: total taps + leaderboard */}
-        <div className="absolute top-2 sm:top-4 left-1/2 -translate-x-1/2 z-30">
+        {/* Top overlay above the image (mobile only): total taps + leaderboard */}
+        <div className="absolute top-2 sm:top-4 left-1/2 -translate-x-1/2 z-30 md:hidden">
           <div className="flex items-center gap-3 sm:gap-6">
             <div className="text-center">
               <div className="text-xs sm:text-sm md:text-base text-muted-foreground">Total Taps</div>

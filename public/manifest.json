@@ -1,0 +1,19 @@
+{
+  "name": "GOONER TapTap",
+  "short_name": "TapTap",
+  "description": "Tap the penguin to earn pops! Mobile-first PWA game for GOONER meme coin.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#1e40af",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "categories": ["games", "entertainment"],
+  "lang": "en"
+}

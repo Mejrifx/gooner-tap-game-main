@@ -201,7 +201,11 @@ const PenguinTap = () => {
 
   
 
+  const pressActiveRef = useRef<boolean>(false);
+
   const handlePressStart = useCallback(() => {
+    if (pressActiveRef.current) return;
+    pressActiveRef.current = true;
     setIsPressed(true);
     setPops((prev) => prev + 1);
     setShowPopEffect(true);
@@ -241,7 +245,8 @@ const PenguinTap = () => {
   }, [scheduleFlush]);
 
   const handlePressEnd = useCallback(() => {
-    setIsPressed(false);
+      setIsPressed(false);
+    pressActiveRef.current = false;
   }, []);
 
   const copyCA = useCallback(async () => {
@@ -263,7 +268,7 @@ const PenguinTap = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-100 to-blue-300 dark:from-blue-900 dark:to-blue-700 flex flex-col">
       {/* Navigation Bar */}
-      <nav className="relative flex items-center p-4 bg-card/20 backdrop-blur-sm">
+      <nav className="relative grid grid-cols-3 items-center p-3 md:p-4 bg-card/20 backdrop-blur-sm">
         {/* Left: logo */}
         <div className="flex items-center">
           <img
@@ -274,12 +279,12 @@ const PenguinTap = () => {
           />
         </div>
 
-        {/* Center: absolute centered */}
-        <div className="absolute left-1/2 -translate-x-1/2">
-          <div className="flex items-center gap-6">
+        {/* Center */}
+        <div className="justify-self-center">
+          <div className="flex items-center gap-4 sm:gap-6">
           <div className="text-center">
-            <div className="text-sm md:text-base text-muted-foreground">Total Taps</div>
-            <div className={`text-2xl md:text-3xl font-extrabold text-primary ${showPopEffect ? 'pop-animation' : ''}`}>
+              <div className="text-xs sm:text-sm md:text-base text-muted-foreground">Total Taps</div>
+              <div className={`text-xl sm:text-2xl md:text-3xl font-extrabold text-primary ${showPopEffect ? 'pop-animation' : ''}`}>
               {globalTaps.toLocaleString()}
             </div>
           </div>
@@ -289,29 +294,30 @@ const PenguinTap = () => {
               variant="outline"
               size="default"
               onClick={() => setShowLeaderboard(!showLeaderboard)}
-              className="flex items-center gap-2 text-sm md:text-base px-4 py-2"
+                className="flex items-center gap-2 text-xs sm:text-sm md:text-base px-3 sm:px-4 py-2"
             >
-              Global Taps Leaderboard
+                <span className="sm:hidden">Leaderboard</span>
+                <span className="hidden sm:inline">Global Taps Leaderboard</span>
               <ChevronDown size={14} className={`transition-transform ${showLeaderboard ? 'rotate-180' : ''}`} />
             </Button>
 
             {showLeaderboard && (
-              <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 z-50 bg-card border border-border rounded-lg shadow-xl w-96 max-h-96 overflow-y-auto">
+              <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 z-50 bg-card border border-border rounded-lg shadow-xl w-80 sm:w-96 max-w-[90vw] max-h-96 overflow-y-auto">
                 <div className="p-4 border-b border-border">
                   <h3 className="font-semibold text-foreground text-base md:text-lg">Country Leaderboard</h3>
                 </div>
                 <div className="py-2">
                   {leaderboard.map((entry, index) => (
-                    <div key={index} className="flex items-center justify-between px-5 py-3 hover:bg-muted/50">
-                      <div className="flex items-center gap-3">
-                        <span className="text-sm md:text-base font-medium text-muted-foreground">
+                    <div key={index} className="flex items-center justify-between px-4 sm:px-5 py-3 hover:bg-muted/50">
+                      <div className="flex items-center gap-2 sm:gap-3">
+                        <span className="text-xs sm:text-sm md:text-base font-medium text-muted-foreground">
                           {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`}
                         </span>
-                        <span className="text-sm md:text-base font-medium text-foreground">
+                        <span className="text-xs sm:text-sm md:text-base font-medium text-foreground">
                           {entry.country} <span className="ml-2 text-muted-foreground">{entry.countryName}</span>
                         </span>
                       </div>
-                      <span className="text-sm md:text-base font-bold text-primary">{entry.taps.toLocaleString()}</span>
+                      <span className="text-xs sm:text-sm md:text-base font-bold text-primary">{entry.taps.toLocaleString()}</span>
                     </div>
                   ))}
                 </div>
@@ -321,8 +327,8 @@ const PenguinTap = () => {
           </div>
         </div>
 
-        {/* Right: actions (push to right via ml-auto) */}
-        <div className="flex items-center gap-3 ml-auto">
+        {/* Right: actions */}
+        <div className="flex items-center gap-2 sm:gap-3 justify-self-end">
           <span className="text-2xl" title="Your location">{countryFlag}</span>
           <Button
             variant="ghost"
@@ -353,7 +359,7 @@ const PenguinTap = () => {
             variant="ghost"
             size="sm"
             onClick={() => window.open('https://www.purgypengoon.com/', '_blank')}
-            className="flex items-center gap-1"
+            className="hidden sm:flex items-center gap-1"
           >
             About Gooner
             <ExternalLink size={14} />
@@ -366,12 +372,18 @@ const PenguinTap = () => {
         className="relative flex-1 flex flex-col items-center justify-center p-4 select-none cursor-pointer"
         role="button"
         tabIndex={0}
-        onMouseDown={handlePressStart}
-        onMouseUp={handlePressEnd}
-        onMouseLeave={handlePressEnd}
-        onTouchStart={handlePressStart}
-        onTouchEnd={handlePressEnd}
-        onTouchCancel={handlePressEnd}
+        onPointerDown={(e) => {
+          if (e.isPrimary) handlePressStart();
+        }}
+        onPointerUp={(e) => {
+          if (e.isPrimary) handlePressEnd();
+        }}
+        onPointerCancel={(e) => {
+          if (e.isPrimary) handlePressEnd();
+        }}
+        onPointerLeave={(e) => {
+          if (e.isPrimary) handlePressEnd();
+        }}
         onKeyDown={(e) => {
           if (e.key === ' ' || e.key === 'Enter') {
             e.preventDefault();
@@ -391,6 +403,7 @@ const PenguinTap = () => {
           backgroundPosition: 'center',
           width: '100%',
           height: '100%',
+          touchAction: 'manipulation',
         }}
       >
         {/* Counter/leaderboard moved into navbar */}

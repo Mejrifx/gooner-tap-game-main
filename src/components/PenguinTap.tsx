@@ -279,7 +279,7 @@ const PenguinTap = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-100 to-blue-300 dark:from-blue-900 dark:to-blue-700 flex flex-col">
       {/* Navigation Bar */}
-      <nav className="relative grid grid-cols-[auto_1fr_auto] items-center gap-2 px-3 py-2 md:px-4 md:py-3 bg-card/20 backdrop-blur-sm">
+      <nav className="relative z-50 grid grid-cols-[auto_1fr_auto] items-center gap-2 px-3 py-2 md:px-4 md:py-3 bg-card/20 backdrop-blur-sm">
         {/* Left: logo */}
         <div className="flex items-center">
           <img
@@ -404,7 +404,7 @@ const PenguinTap = () => {
           })()}
         </div>
         {/* Top overlay above the image (mobile only): total taps + leaderboard */}
-        <div className="absolute top-2 sm:top-4 left-1/2 -translate-x-1/2 z-30 md:hidden">
+        <div className="absolute top-2 sm:top-4 left-1/2 -translate-x-1/2 z-50 md:hidden">
           <div className="flex items-center gap-3 sm:gap-6">
             <div className="text-center">
               <div className="text-xs sm:text-sm md:text-base text-muted-foreground">Total Taps</div>

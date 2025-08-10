@@ -396,9 +396,9 @@ const PenguinTap = () => {
           style={{ touchAction: 'manipulation', width: 'min(90vw, 1100px)', maxHeight: 'calc(100vh - 120px)' }}
         >
           {(() => {
-            const IMG_BASE = '/Gooner%20Base.png';
-            const IMG_2 = '/Gooner%20Mouth%20%231.png';
-            const IMG_3 = '/Gooner%20Mouth%20%232.png';
+            const IMG_BASE = '/gooner-1.png';
+            const IMG_2 = '/gooner-2.png';
+            const IMG_3 = '/gooner-3.png';
             const frames = [IMG_BASE, IMG_2, IMG_3];
             return (
               <>

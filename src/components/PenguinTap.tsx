@@ -383,7 +383,7 @@ const PenguinTap = () => {
           onPointerCancel={(e) => e.isPrimary && handlePressEnd()}
           onPointerLeave={(e) => e.isPrimary && handlePressEnd()}
           className={`relative select-none transition-transform ${isPressed ? 'scale-[0.985]' : ''}`}
-          style={{ touchAction: 'manipulation', width: 'min(90vw, 1100px)', maxHeight: 'calc(100vh - 120px)' }}
+          style={{ touchAction: 'manipulation', width: 'min(90vw, 1100px)', height: 'calc(100vh - 120px)', overflow: 'hidden' }}
         >
           {(() => {
             const fallback = ['/gooner-mouth-closed.png', '/gooner-mouth-open.png', '/gooner-mouth-open.png'];
@@ -405,10 +405,7 @@ const PenguinTap = () => {
                     style={{ pointerEvents: 'none' }}
                   />
                 ))}
-                {/* Sizer: reserves height for container */}
-                <div className="invisible">
-                  <img src={frames[0]} alt="" className="w-full h-auto object-contain select-none" />
-                </div>
+                {/* Container has explicit height; no sizer needed */}
               </>
             );
           })()}

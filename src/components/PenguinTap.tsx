@@ -287,9 +287,6 @@ const PenguinTap = () => {
             alt="GOONER"
             className="h-10 md:h-12 lg:h-14 w-auto select-none transition-transform duration-150 hover:scale-105 hover:drop-shadow-lg"
             draggable={false}
-            onError={(e) => {
-              (e.currentTarget as HTMLImageElement).src = '/gooner-mouth-open.png';
-            }}
           />
         </div>
 
@@ -386,7 +383,6 @@ const PenguinTap = () => {
           style={{ touchAction: 'manipulation', width: 'min(90vw, 1100px)', height: 'calc(100vh - 120px)', overflow: 'hidden' }}
         >
           {(() => {
-            const fallback = ['/gooner-mouth-closed.png', '/gooner-mouth-open.png', '/gooner-mouth-open.png'];
             const base = ['/gooner-1.png', '/gooner-2.png', '/gooner-3.png'];
             const version = (typeof __BUILD_TIME__ !== 'undefined' ? `?v=${__BUILD_TIME__}` : '');
             const frames = base.map((p) => p + version);
@@ -398,9 +394,6 @@ const PenguinTap = () => {
                     src={src}
                     alt="GOONER"
                     draggable={false}
-                    onError={(e) => {
-                      (e.currentTarget as HTMLImageElement).src = fallback[idx];
-                    }}
                     className={`absolute inset-0 w-full h-full object-contain select-none transition-opacity duration-150 ease-out ${currentFrame === (idx as 0|1|2) ? 'opacity-100' : 'opacity-0'}`}
                     style={{ pointerEvents: 'none' }}
                   />

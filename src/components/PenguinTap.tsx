@@ -259,20 +259,7 @@ const PenguinTap = () => {
     pressActiveRef.current = false;
   }, []);
 
-  // Reset frame to base after brief inactivity
-  useEffect(() => {
-    if (resetTimerRef.current != null) {
-      window.clearTimeout(resetTimerRef.current);
-      resetTimerRef.current = null;
-    }
-    resetTimerRef.current = window.setTimeout(() => setCurrentFrame(0), 600);
-    return () => {
-      if (resetTimerRef.current != null) {
-        window.clearTimeout(resetTimerRef.current);
-        resetTimerRef.current = null;
-      }
-    };
-  }, [pops]);
+  // No auto-reset: the currentFrame persists across time until next tap
   const copyCA = useCallback(async () => {
     try {
       await navigator.clipboard.writeText(CONTRACT_ADDRESS);

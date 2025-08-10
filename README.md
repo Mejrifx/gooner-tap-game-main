@@ -2,7 +2,7 @@
 
 Mobile-first tap-to-earn PWA. Tap GOONER the penguin to rack up taps and climb the global leaderboard.
 
-![GOONER Preview](public/gooner-mouth-closed.png)
+![GOONER Preview](public/gooner-1.png)
 
 ## 🎮 Features
 

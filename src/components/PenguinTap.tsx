@@ -386,7 +386,8 @@ const PenguinTap = () => {
             const IMG_BASE = '/gooner-1.png';
             const IMG_2 = '/gooner-2.png';
             const IMG_3 = '/gooner-3.png';
-            const frames = [IMG_BASE, IMG_2, IMG_3];
+            const version = (typeof __BUILD_TIME__ !== 'undefined' ? `?v=${__BUILD_TIME__}` : '');
+            const frames = [IMG_BASE + version, IMG_2 + version, IMG_3 + version];
             return (
               <>
                 {frames.map((src, idx) => (

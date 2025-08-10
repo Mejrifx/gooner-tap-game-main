@@ -7,6 +7,8 @@ import { supabase } from '@/lib/supabaseClient';
 const PenguinTap = () => {
   const [pops, setPops] = useState(0);
   const [isPressed, setIsPressed] = useState(false);
+  const [currentFrame, setCurrentFrame] = useState<0 | 1 | 2>(0);
+  const resetTimerRef = useRef<number | null>(null);
   const [showPopEffect, setShowPopEffect] = useState(false);
   const [countryFlag, setCountryFlag] = useState('🌍');
   const countryCodeRef = useRef<string>('');
@@ -203,6 +205,28 @@ const PenguinTap = () => {
 
   const pressActiveRef = useRef<boolean>(false);
 
+  const playFrameSound = (frame: 0 | 1 | 2) => {
+    try {
+      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      const startHz = frame === 0 ? 800 : frame === 1 ? 950 : 1100;
+      const endHz = frame === 0 ? 400 : frame === 1 ? 550 : 700;
+      
+      oscillator.frequency.setValueAtTime(startHz, audioContext.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(endHz, audioContext.currentTime + 0.12);
+      gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.12);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.12);
+    } catch {}
+  };
+
   const handlePressStart = useCallback(() => {
     if (pressActiveRef.current) return;
     pressActiveRef.current = true;
@@ -215,26 +239,12 @@ const PenguinTap = () => {
       navigator.vibrate(50);
     }
 
-    // Play sound effect placeholder
-    try {
-      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-      const oscillator = audioContext.createOscillator();
-      const gainNode = audioContext.createGain();
-      
-      oscillator.connect(gainNode);
-      gainNode.connect(audioContext.destination);
-      
-      oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
-      oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.1);
-      
-      gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
-      
-      oscillator.start(audioContext.currentTime);
-      oscillator.stop(audioContext.currentTime + 0.1);
-    } catch (error) {
-      console.log('Audio not supported');
-    }
+    // Advance animation frame and play corresponding sound
+    setCurrentFrame((prev) => {
+      const next = ((prev + 1) % 3) as 0 | 1 | 2;
+      playFrameSound(next);
+      return next;
+    });
 
     // Buffer increments and schedule a flush to reduce writes
     pendingIncrementsRef.current += 1;
@@ -249,6 +259,20 @@ const PenguinTap = () => {
     pressActiveRef.current = false;
   }, []);
 
+  // Reset frame to base after brief inactivity
+  useEffect(() => {
+    if (resetTimerRef.current != null) {
+      window.clearTimeout(resetTimerRef.current);
+      resetTimerRef.current = null;
+    }
+    resetTimerRef.current = window.setTimeout(() => setCurrentFrame(0), 600);
+    return () => {
+      if (resetTimerRef.current != null) {
+        window.clearTimeout(resetTimerRef.current);
+        resetTimerRef.current = null;
+      }
+    };
+  }, [pops]);
   const copyCA = useCallback(async () => {
     try {
       await navigator.clipboard.writeText(CONTRACT_ADDRESS);
@@ -287,9 +311,9 @@ const PenguinTap = () => {
               <div className={`text-2xl lg:text-3xl font-extrabold text-primary ${showPopEffect ? 'pop-animation' : ''}`}>{globalTaps.toLocaleString()}</div>
             </div>
             <div className="relative leaderboard-container">
-              <Button
-                variant="ghost"
-                size="sm"
+          <Button
+            variant="ghost"
+            size="sm"
                 onClick={() => setShowLeaderboard(!showLeaderboard)}
                 className="flex items-center gap-2 text-sm lg:text-base px-3 lg:px-4 py-2"
               >
@@ -342,41 +366,60 @@ const PenguinTap = () => {
           <div className="hidden md:flex items-center gap-2">
             <Button variant="ghost" size="sm" onClick={copyCA} className="flex items-center gap-1 focus:outline-none focus:ring-0">
               <Copy size={14} /> <span>COPY CA</span>
-            </Button>
+          </Button>
             <Button variant="ghost" size="sm" onClick={() => window.open('https://x.com/PurgyPengoon', '_blank')} className="flex items-center gap-1 focus:outline-none focus:ring-0">
-              <span className="text-lg">𝕏</span>
-            </Button>
+            <span className="text-lg">𝕏</span>
+          </Button>
             <Button variant="ghost" size="sm" onClick={() => window.open('https://t.me/gooneronabs', '_blank')} className="flex items-center gap-1 focus:outline-none focus:ring-0">
-              <Send size={16} />
-            </Button>
+            <Send size={16} />
+          </Button>
             <Button variant="ghost" size="sm" onClick={() => window.open('https://www.purgypengoon.com/', '_blank')} className="flex items-center gap-1 focus:outline-none focus:ring-0">
               <span>ABOUT GOONER</span> <ExternalLink size={14} />
-            </Button>
+          </Button>
           </div>
         </div>
       </nav>
 
       {/* Main Content */}
       <div className="relative flex-1 flex flex-col items-center justify-center p-4 select-none">
-        {/* Gooner image as an interactive element */}
-        <img
-          src={isPressed ? '/gooner-mouth-open.png' : '/gooner-mouth-closed.png'}
-          alt="GOONER"
-          draggable={false}
+        {/* Gooner image stack for 3-frame animation with smooth cross-fade */}
+        <div
+          role="button"
+          aria-label="Tap GOONER"
           onContextMenu={(e) => e.preventDefault()}
           onDragStart={(e) => e.preventDefault()}
           onPointerDown={(e) => e.isPrimary && handlePressStart()}
           onPointerUp={(e) => e.isPrimary && handlePressEnd()}
           onPointerCancel={(e) => e.isPrimary && handlePressEnd()}
           onPointerLeave={(e) => e.isPrimary && handlePressEnd()}
-          className={`select-none h-auto transition-transform focus:outline-none focus-visible:outline-none active:outline-none focus:shadow-none active:shadow-none`}
-          style={{
-            touchAction: 'manipulation',
-            width: 'min(90vw, 1100px)',
-            maxHeight: 'calc(100vh - 120px)',
-            objectFit: 'contain'
-          }}
-        />
+          className={`relative select-none transition-transform ${isPressed ? 'scale-[0.985]' : ''}`}
+          style={{ touchAction: 'manipulation', width: 'min(90vw, 1100px)', maxHeight: 'calc(100vh - 120px)' }}
+        >
+          {(() => {
+            const IMG_BASE = '/Gooner%20Base.png';
+            const IMG_2 = '/Gooner%20Mouth%20%231.png';
+            const IMG_3 = '/Gooner%20Mouth%20%232.png';
+            const frames = [IMG_BASE, IMG_2, IMG_3];
+            return (
+              <>
+                {frames.map((src, idx) => (
+                  <img
+                    key={idx}
+                    src={src}
+                    alt="GOONER"
+                    draggable={false}
+                    className={`absolute inset-0 w-full h-full object-contain select-none transition-opacity duration-150 ease-out ${currentFrame === (idx as 0|1|2) ? 'opacity-100' : 'opacity-0'}`}
+                    style={{ pointerEvents: 'none' }}
+                  />
+                ))}
+                {/* Sizer: reserves height for container */}
+                <div className="invisible">
+                  <img src={frames[0]} alt="" className="w-full h-auto object-contain select-none" />
+            </div>
+              </>
+            );
+          })()}
+        </div>
         {/* Top overlay above the image (mobile only): total taps + leaderboard */}
         <div className="absolute top-2 sm:top-4 left-1/2 -translate-x-1/2 z-30 md:hidden">
           <div className="flex items-center gap-3 sm:gap-6">
@@ -384,26 +427,26 @@ const PenguinTap = () => {
               <div className="text-xs sm:text-sm md:text-base text-muted-foreground">Total Taps</div>
               <div className={`text-xl sm:text-2xl md:text-3xl font-extrabold text-primary ${showPopEffect ? 'pop-animation' : ''}`}>
                 {globalTaps.toLocaleString()}
-              </div>
-            </div>
-            <div className="relative leaderboard-container">
-              <Button
+      </div>
+          </div>
+          <div className="relative leaderboard-container">
+            <Button
                 variant="ghost"
-                size="sm"
-                onClick={() => setShowLeaderboard(!showLeaderboard)}
+              size="sm"
+              onClick={() => setShowLeaderboard(!showLeaderboard)}
                 className="flex items-center gap-2 text-xs sm:text-sm md:text-base px-2.5 sm:px-4 py-1.5"
-              >
+            >
                 <span className="sm:hidden">Leaderboard</span>
                 <span className="hidden sm:inline">Global Taps Leaderboard</span>
-                <ChevronDown size={14} className={`transition-transform ${showLeaderboard ? 'rotate-180' : ''}`} />
-              </Button>
-              {showLeaderboard && (
+              <ChevronDown size={14} className={`transition-transform ${showLeaderboard ? 'rotate-180' : ''}`} />
+            </Button>
+            {showLeaderboard && (
                 <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 z-50 bg-card border border-border rounded-lg shadow-xl w-80 sm:w-96 max-w-[90vw] max-h-96 overflow-y-auto">
                   <div className="p-4 border-b border-border">
                     <h3 className="font-semibold text-foreground text-base md:text-lg">Country Leaderboard</h3>
-                  </div>
-                  <div className="py-2">
-                    {leaderboard.map((entry, index) => (
+                </div>
+                <div className="py-2">
+                  {leaderboard.map((entry, index) => (
                       <div key={index} className="flex items-center justify-between px-4 sm:px-5 py-3 hover:bg-muted/50">
                         <div className="flex items-center gap-2 sm:gap-3">
                           <span className="text-xs sm:text-sm md:text-base font-medium text-muted-foreground">
@@ -412,16 +455,16 @@ const PenguinTap = () => {
                           <span className="text-xs sm:text-sm md:text-base font-medium text-foreground">
                             {entry.country} <span className="ml-2 text-muted-foreground">{entry.countryName}</span>
                           </span>
-                        </div>
-                        <span className="text-xs sm:text-sm md:text-base font-bold text-primary">{entry.taps.toLocaleString()}</span>
                       </div>
-                    ))}
-                  </div>
+                        <span className="text-xs sm:text-sm md:text-base font-bold text-primary">{entry.taps.toLocaleString()}</span>
+                    </div>
+                  ))}
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </div>
+      </div>
 
         {/* Mobile-only: bottom buttons removed; all actions live in navbar */}
       </div>

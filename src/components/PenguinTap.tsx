@@ -7,7 +7,7 @@ import { supabase } from '@/lib/supabaseClient';
 const PenguinTap = () => {
   const [pops, setPops] = useState(0);
   const [isPressed, setIsPressed] = useState(false);
-  const [currentFrame, setCurrentFrame] = useState<0 | 1 | 2>(0);
+  const [currentFrame, setCurrentFrame] = useState<0 | 1>(0);
   const resetTimerRef = useRef<number | null>(null);
   const [showPopEffect, setShowPopEffect] = useState(false);
   const [countryFlag, setCountryFlag] = useState('🌍');
@@ -205,7 +205,7 @@ const PenguinTap = () => {
 
   const pressActiveRef = useRef<boolean>(false);
 
-  const playFrameSound = (frame: 0 | 1 | 2) => {
+  const playFrameSound = (frame: 0 | 1) => {
     try {
       const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
       const oscillator = audioContext.createOscillator();
@@ -214,8 +214,8 @@ const PenguinTap = () => {
       oscillator.connect(gainNode);
       gainNode.connect(audioContext.destination);
       
-      const startHz = frame === 0 ? 800 : frame === 1 ? 950 : 1100;
-      const endHz = frame === 0 ? 400 : frame === 1 ? 550 : 700;
+      const startHz = frame === 0 ? 800 : 950;
+      const endHz = frame === 0 ? 400 : 550;
       
       oscillator.frequency.setValueAtTime(startHz, audioContext.currentTime);
       oscillator.frequency.exponentialRampToValueAtTime(endHz, audioContext.currentTime + 0.12);
@@ -241,7 +241,7 @@ const PenguinTap = () => {
 
     // Advance animation frame and play corresponding sound
     setCurrentFrame((prev) => {
-      const next = ((prev + 1) % 3) as 0 | 1 | 2;
+      const next = ((prev + 1) % 2) as 0 | 1;
       playFrameSound(next);
       return next;
     });
@@ -383,7 +383,7 @@ const PenguinTap = () => {
           style={{ touchAction: 'manipulation', width: 'min(90vw, 1100px)', height: 'calc(100vh - 120px)', overflow: 'hidden' }}
         >
           {(() => {
-            const base = ['/gooner-1.png', '/gooner-2.png', '/gooner-3.png'];
+            const base = ['/gooner-1.png', '/gooner-2.png'];
             const version = (typeof __BUILD_TIME__ !== 'undefined' ? `?v=${__BUILD_TIME__}` : '');
             const frames = base.map((p) => p + version);
             return (
@@ -394,11 +394,10 @@ const PenguinTap = () => {
                     src={src}
                     alt="GOONER"
                     draggable={false}
-                    className={`absolute inset-0 w-full h-full object-contain select-none transition-opacity duration-150 ease-out ${currentFrame === (idx as 0|1|2) ? 'opacity-100' : 'opacity-0'}`}
+                    className={`absolute inset-0 w-full h-full object-contain select-none transition-opacity duration-150 ease-out ${currentFrame === (idx as 0|1) ? 'opacity-100' : 'opacity-0'}`}
                     style={{ pointerEvents: 'none' }}
                   />
                 ))}
-                {/* Container has explicit height; no sizer needed */}
               </>
             );
           })()}

@@ -290,44 +290,38 @@ const PenguinTap = () => {
           />
         </div>
 
-        {/* Center (desktop only): counter + leaderboard, forced centered */}
-        <div className="hidden md:block md:absolute md:left-1/2 md:-translate-x-1/2">
-          <div className="flex items-center gap-4 lg:gap-6">
-            <div className="text-center">
-              <div className="text-sm lg:text-base text-muted-foreground">Total Taps</div>
-              <div className={`text-2xl lg:text-3xl font-extrabold text-primary ${showPopEffect ? 'pop-animation' : ''}`}>{globalTaps.toLocaleString()}</div>
-            </div>
-            <div className="relative leaderboard-container">
-          <Button
-            variant="ghost"
-            size="sm"
-                onClick={() => setShowLeaderboard(!showLeaderboard)}
-                className="flex items-center gap-2 text-sm lg:text-base px-3 lg:px-4 py-2"
-              >
-                Global Taps Leaderboard
-                <ChevronDown size={14} className={`transition-transform ${showLeaderboard ? 'rotate-180' : ''}`} />
-              </Button>
-              {showLeaderboard && (
-                <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 z-50 bg-card border border-border rounded-lg shadow-xl w-96 max-h-96 overflow-y-auto">
-                  <div className="p-4 border-b border-border">
-                    <h3 className="font-semibold text-foreground text-base lg:text-lg">Country Leaderboard</h3>
-                  </div>
-                  <div className="py-2">
-                    {leaderboard.map((entry, index) => (
-                      <div key={index} className="flex items-center justify-between px-5 py-3 hover:bg-muted/50">
-                        <div className="flex items-center gap-3">
-                          <span className="text-sm lg:text-base font-medium text-muted-foreground">{index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`}</span>
-                          <span className="text-sm lg:text-base font-medium text-foreground">
-                            {entry.country} <span className="ml-2 text-muted-foreground">{entry.countryName}</span>
-                          </span>
-                        </div>
-                        <span className="text-sm lg:text-base font-bold text-primary">{entry.taps.toLocaleString()}</span>
-                      </div>
-                    ))}
-                  </div>
+        {/* Center: leaderboard toggle centered on navbar */}
+        <div className="absolute left-1/2 -translate-x-1/2">
+          <div className="relative leaderboard-container">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setShowLeaderboard(!showLeaderboard)}
+              className="flex items-center gap-2 text-sm lg:text-base px-3 lg:px-4 py-2"
+            >
+              Global Taps Leaderboard
+              <ChevronDown size={14} className={`transition-transform ${showLeaderboard ? 'rotate-180' : ''}`} />
+            </Button>
+            {showLeaderboard && (
+              <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 z-50 bg-card border border-border rounded-lg shadow-xl w-96 max-h-96 overflow-y-auto">
+                <div className="p-4 border-b border-border">
+                  <h3 className="font-semibold text-foreground text-base lg:text-lg">Country Leaderboard</h3>
                 </div>
-              )}
-            </div>
+                <div className="py-2">
+                  {leaderboard.map((entry, index) => (
+                    <div key={index} className="flex items-center justify-between px-5 py-3 hover:bg-muted/50">
+                      <div className="flex items-center gap-3">
+                        <span className="text-sm lg:text-base font-medium text-muted-foreground">{index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`}</span>
+                        <span className="text-sm lg:text-base font-medium text-foreground">
+                          {entry.country} <span className="ml-2 text-muted-foreground">{entry.countryName}</span>
+                        </span>
+                      </div>
+                      <span className="text-sm lg:text-base font-bold text-primary">{entry.taps.toLocaleString()}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -402,48 +396,15 @@ const PenguinTap = () => {
             );
           })()}
         </div>
-        {/* Top overlay above the image (mobile only): total taps + leaderboard */}
-        <div className="absolute top-2 sm:top-4 left-1/2 -translate-x-1/2 z-50 md:hidden">
+        {/* Top overlay above the image: total taps */}
+        <div className="absolute top-2 sm:top-4 left-1/2 -translate-x-1/2 z-[60]">
           <div className="flex items-center gap-3 sm:gap-6">
             <div className="text-center">
               <div className="text-xs sm:text-sm md:text-base text-muted-foreground">Total Taps</div>
               <div className={`text-xl sm:text-2xl md:text-3xl font-extrabold text-primary ${showPopEffect ? 'pop-animation' : ''}`}>
                 {globalTaps.toLocaleString()}
-      </div>
-          </div>
-          <div className="relative leaderboard-container">
-            <Button
-                variant="ghost"
-              size="sm"
-              onClick={() => setShowLeaderboard(!showLeaderboard)}
-                className="flex items-center gap-2 text-xs sm:text-sm md:text-base px-2.5 sm:px-4 py-1.5"
-            >
-                <span className="sm:hidden">Leaderboard</span>
-                <span className="hidden sm:inline">Global Taps Leaderboard</span>
-              <ChevronDown size={14} className={`transition-transform ${showLeaderboard ? 'rotate-180' : ''}`} />
-            </Button>
-            {showLeaderboard && (
-                <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 z-50 bg-card border border-border rounded-lg shadow-xl w-80 sm:w-96 max-w-[90vw] max-h-96 overflow-y-auto">
-                  <div className="p-4 border-b border-border">
-                    <h3 className="font-semibold text-foreground text-base md:text-lg">Country Leaderboard</h3>
-                </div>
-                <div className="py-2">
-                  {leaderboard.map((entry, index) => (
-                      <div key={index} className="flex items-center justify-between px-4 sm:px-5 py-3 hover:bg-muted/50">
-                        <div className="flex items-center gap-2 sm:gap-3">
-                          <span className="text-xs sm:text-sm md:text-base font-medium text-muted-foreground">
-                            {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`}
-                          </span>
-                          <span className="text-xs sm:text-sm md:text-base font-medium text-foreground">
-                            {entry.country} <span className="ml-2 text-muted-foreground">{entry.countryName}</span>
-                          </span>
-                      </div>
-                        <span className="text-xs sm:text-sm md:text-base font-bold text-primary">{entry.taps.toLocaleString()}</span>
-                    </div>
-                  ))}
-                </div>
               </div>
-            )}
+            </div>
           </div>
         </div>
       </div>

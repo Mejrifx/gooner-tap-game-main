@@ -409,12 +409,6 @@ const PenguinTap = () => {
         </div>
       </div>
 
-        {/* Mobile-only: bottom buttons removed; all actions live in navbar */}
-      </div>
-
-      {/* Global Counter and Leaderboard */}
-      {/* bottom bar removed; overlay moved to top */}
-
       {/* Placeholder for Solana integration */}
       {/* 
       TODO: Integrate Solana wallet connection

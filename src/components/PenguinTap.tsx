@@ -412,16 +412,15 @@ const PenguinTap = () => {
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Mobile-only leaderboard toggle */}
-      <div className="md:hidden flex justify-center py-6">
+        {/* Mobile-only leaderboard toggle */}
+        <div className="md:hidden flex justify-center py-6">
         <div className="relative">
           <Button
-            variant="ghost"
+            variant="outline"
             size="sm"
             onClick={() => setShowLeaderboard(!showLeaderboard)}
-            className="flex items-center gap-2 text-sm px-4 py-2 font-cartoon"
+            className="flex items-center gap-2 text-sm px-4 py-2 font-cartoon bg-card/80 border-primary/20 hover:bg-primary/10"
           >
             <Globe size={16} />
             Global Taps Leaderboard

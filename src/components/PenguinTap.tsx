@@ -415,7 +415,7 @@ const PenguinTap = () => {
 
         {/* Mobile-only leaderboard toggle */}
         <div className="md:hidden flex justify-center py-6">
-        <div className="relative">
+          <div className="relative">
           <Button
             variant="outline"
             size="sm"
@@ -446,6 +446,7 @@ const PenguinTap = () => {
               </div>
             </div>
           )}
+          </div>
         </div>
       </div>
 

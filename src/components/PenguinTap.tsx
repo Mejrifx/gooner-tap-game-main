@@ -208,24 +208,14 @@ const PenguinTap = () => {
 
   const playFrameSound = (frame: 0 | 1) => {
     try {
-      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
-      const oscillator = audioContext.createOscillator();
-      const gainNode = audioContext.createGain();
-      
-      oscillator.connect(gainNode);
-      gainNode.connect(audioContext.destination);
-      
-      const startHz = frame === 0 ? 800 : 950;
-      const endHz = frame === 0 ? 400 : 550;
-      
-      oscillator.frequency.setValueAtTime(startHz, audioContext.currentTime);
-      oscillator.frequency.exponentialRampToValueAtTime(endHz, audioContext.currentTime + 0.12);
-      gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.12);
-      
-      oscillator.start(audioContext.currentTime);
-      oscillator.stop(audioContext.currentTime + 0.12);
-    } catch {}
+      // Use custom audio files based on frame
+      const audioFile = frame === 0 ? '/1.mp3' : '/2.mp3';
+      const audio = new Audio(audioFile);
+      audio.volume = 0.5; // Adjust volume as needed
+      audio.play().catch(e => console.log('Audio playback failed:', e));
+    } catch (e) {
+      console.log('Audio not supported');
+    }
   };
 
   const handlePressStart = useCallback(() => {
@@ -277,11 +267,16 @@ const PenguinTap = () => {
     }
   }, [toast]);
 
-  // Click outside to close mobile leaderboard
+  // Click outside to close mobile leaderboard (but not on the toggle button)
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (mobileLeaderboardRef.current && !mobileLeaderboardRef.current.contains(event.target as Node)) {
-        setShowLeaderboard(false);
+      const target = event.target as Element;
+      if (mobileLeaderboardRef.current && !mobileLeaderboardRef.current.contains(target)) {
+        // Only close if not clicking on the toggle button itself
+        const isToggleButton = target.closest('button[aria-label="Global Leaderboard Toggle"]');
+        if (!isToggleButton) {
+          setShowLeaderboard(false);
+        }
       }
     };
 
@@ -433,6 +428,7 @@ const PenguinTap = () => {
           <Button
             variant="outline"
             size="sm"
+            aria-label="Global Leaderboard Toggle"
             onClick={() => setShowLeaderboard(!showLeaderboard)}
             className="flex items-center gap-2 text-sm px-4 py-2 font-cartoon bg-card/80 border-primary/20 hover:bg-primary/10"
           >

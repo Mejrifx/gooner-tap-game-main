@@ -280,14 +280,17 @@ const PenguinTap = () => {
     <div className="min-h-screen bg-gradient-to-b from-blue-100 to-blue-300 dark:from-blue-900 dark:to-blue-700 flex flex-col">
       {/* Navigation Bar */}
       <nav className="relative z-50 grid grid-cols-[auto_1fr_auto] items-center gap-2 px-3 py-2 md:px-4 md:py-3 bg-card/20 backdrop-blur-sm">
-        {/* Left: logo */}
-        <div className="flex items-center">
+        {/* Left: logo and title */}
+        <div className="flex items-center gap-2 md:gap-3">
           <img
             src="/gooner-2.png"
             alt="GOONER"
             className="h-10 md:h-12 lg:h-14 w-auto select-none transition-transform duration-150 hover:scale-105 hover:drop-shadow-lg"
             draggable={false}
           />
+          <h1 className="text-lg md:text-xl lg:text-2xl xl:text-3xl font-cartoon font-bold text-primary">
+            $GOONER GOONS!
+          </h1>
         </div>
 
         {/* Center: leaderboard toggle centered on navbar */}
@@ -401,8 +404,8 @@ const PenguinTap = () => {
         <div className="absolute top-8 sm:top-12 md:top-16 left-1/2 -translate-x-1/2 z-[60]">
           <div className="flex items-center gap-3 sm:gap-6">
             <div className="text-center">
-              <div className="text-sm sm:text-base md:text-lg text-muted-foreground font-bold">Total Taps</div>
-              <div className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-primary font-cartoon ${showPopEffect ? 'pop-animation' : ''}`}>
+              <div className="text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground font-bold">Total Goons</div>
+              <div className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-primary font-cartoon ${showPopEffect ? 'pop-animation' : ''}`}>
                 {globalTaps.toLocaleString()}
               </div>
             </div>

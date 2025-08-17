@@ -13,6 +13,7 @@ const PenguinTap = () => {
   const [countryFlag, setCountryFlag] = useState('🌍');
   const countryCodeRef = useRef<string>('');
   const [showLeaderboard, setShowLeaderboard] = useState(false);
+  const mobileLeaderboardRef = useRef<HTMLDivElement>(null);
   const [leaderboard, setLeaderboard] = useState<{ country: string; countryName: string; taps: number }[]>([]);
   const { toast } = useToast();
 
@@ -276,6 +277,20 @@ const PenguinTap = () => {
     }
   }, [toast]);
 
+  // Click outside to close mobile leaderboard
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (mobileLeaderboardRef.current && !mobileLeaderboardRef.current.contains(event.target as Node)) {
+        setShowLeaderboard(false);
+      }
+    };
+
+    if (showLeaderboard) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [showLeaderboard]);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-100 to-blue-300 dark:from-blue-900 dark:to-blue-700 flex flex-col">
       {/* Navigation Bar */}
@@ -288,9 +303,8 @@ const PenguinTap = () => {
             className="h-10 md:h-12 lg:h-14 w-auto select-none transition-transform duration-150 hover:scale-105 hover:drop-shadow-lg"
             draggable={false}
           />
-          <h1 className="text-sm sm:text-base md:text-xl lg:text-2xl xl:text-3xl font-cartoon font-bold text-primary">
-            <span className="sm:hidden">$GOONER</span>
-            <span className="hidden sm:inline">$GOONER GOONS!</span>
+          <h1 className="text-xs sm:text-base md:text-xl lg:text-2xl xl:text-3xl font-cartoon font-bold text-primary">
+            $GOONER GOONS!
           </h1>
         </div>
 
@@ -402,7 +416,7 @@ const PenguinTap = () => {
           })()}
         </div>
         {/* Top overlay above the image: total taps */}
-        <div className="absolute top-4 sm:top-6 md:top-8 left-1/2 -translate-x-1/2 z-10">
+        <div className="absolute top-16 sm:top-6 md:top-8 left-1/2 -translate-x-1/2 z-10">
           <div className="flex items-center gap-3 sm:gap-6">
             <div className="text-center">
               <div className="text-lg sm:text-lg md:text-xl lg:text-2xl text-muted-foreground font-bold">Total Goons</div>
@@ -415,7 +429,7 @@ const PenguinTap = () => {
 
         {/* Mobile-only leaderboard toggle */}
         <div className="md:hidden absolute bottom-20 left-1/2 -translate-x-1/2 z-20">
-          <div className="relative">
+          <div className="relative" ref={mobileLeaderboardRef}>
           <Button
             variant="outline"
             size="sm"
@@ -424,7 +438,7 @@ const PenguinTap = () => {
           >
             <Globe size={16} />
             Global Taps Leaderboard
-            <ChevronDown size={14} className={`transition-transform ${showLeaderboard ? 'rotate-180' : ''}`} />
+            <ChevronDown size={14} className={`transition-transform ${showLeaderboard ? '' : 'rotate-180'}`} />
           </Button>
           {showLeaderboard && (
             <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 z-[9999] bg-card border border-border rounded-lg shadow-2xl w-80 max-h-80 overflow-y-auto" style={{zIndex: 9999}}>

@@ -267,16 +267,20 @@ const PenguinTap = () => {
     }
   }, [toast]);
 
-  // Click outside to close mobile leaderboard (but not on the toggle button)
+  // Click outside to close leaderboard
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Element;
-      if (mobileLeaderboardRef.current && !mobileLeaderboardRef.current.contains(target)) {
-        // Only close if not clicking on the toggle button itself
-        const isToggleButton = target.closest('button[aria-label="Global Leaderboard Toggle"]');
-        if (!isToggleButton) {
-          setShowLeaderboard(false);
-        }
+      
+      // Check if click is outside both desktop and mobile leaderboard areas
+      const desktopLeaderboard = document.querySelector('.leaderboard-container');
+      const mobileLeaderboard = mobileLeaderboardRef.current;
+      
+      const isOutsideDesktop = !desktopLeaderboard?.contains(target);
+      const isOutsideMobile = !mobileLeaderboard?.contains(target);
+      
+      if (isOutsideDesktop && isOutsideMobile) {
+        setShowLeaderboard(false);
       }
     };
 

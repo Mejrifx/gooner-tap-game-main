@@ -307,7 +307,7 @@ const PenguinTap = () => {
               <ChevronDown size={14} className={`transition-transform ${showLeaderboard ? 'rotate-180' : ''}`} />
             </Button>
             {showLeaderboard && (
-              <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 z-[70] bg-card border border-border rounded-lg shadow-xl w-96 max-h-96 overflow-y-auto">
+              <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 z-[100] bg-card border border-border rounded-lg shadow-xl w-96 max-h-96 overflow-y-auto">
                 <div className="p-4 border-b border-border">
                   <h3 className="font-semibold text-foreground text-base lg:text-lg">Country Leaderboard</h3>
                 </div>

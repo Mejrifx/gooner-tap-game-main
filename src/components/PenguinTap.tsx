@@ -288,13 +288,14 @@ const PenguinTap = () => {
             className="h-10 md:h-12 lg:h-14 w-auto select-none transition-transform duration-150 hover:scale-105 hover:drop-shadow-lg"
             draggable={false}
           />
-          <h1 className="text-lg md:text-xl lg:text-2xl xl:text-3xl font-cartoon font-bold text-primary">
-            $GOONER GOONS!
+          <h1 className="text-sm sm:text-base md:text-xl lg:text-2xl xl:text-3xl font-cartoon font-bold text-primary">
+            <span className="sm:hidden">$GOONER</span>
+            <span className="hidden sm:inline">$GOONER GOONS!</span>
           </h1>
         </div>
 
-        {/* Center: leaderboard toggle centered on navbar */}
-        <div className="absolute left-1/2 -translate-x-1/2 z-[101]">
+        {/* Center: leaderboard toggle centered on navbar (hidden on mobile) */}
+        <div className="hidden md:block absolute left-1/2 -translate-x-1/2 z-[101]">
           <div className="relative leaderboard-container">
             <Button
               variant="ghost"
@@ -332,19 +333,19 @@ const PenguinTap = () => {
         {/* Right: flag + actions (side-by-side clean) */}
         <div className="flex items-center gap-2 sm:gap-3 justify-self-end flex-nowrap overflow-x-auto whitespace-nowrap">
           <span className="text-2xl" title="Your location">{countryFlag}</span>
-          {/* Mobile: text for Copy CA & About; icons for X/Telegram */}
-          <div className="flex md:hidden items-center gap-2 flex-nowrap">
-            <Button aria-label="Copy CA" variant="ghost" size="sm" onClick={copyCA} className="flex items-center gap-1 focus:outline-none focus:ring-0">
-              <Copy size={16} /> <span className="text-[10px] sm:text-xs">COPY CA</span>
+          {/* Mobile: compact icons only */}
+          <div className="flex md:hidden items-center gap-1 flex-nowrap">
+            <Button aria-label="Copy CA" variant="ghost" size="sm" onClick={copyCA} className="p-1 focus:outline-none focus:ring-0">
+              <Copy size={14} />
             </Button>
-            <Button aria-label="X" variant="ghost" size="icon" onClick={() => window.open('https://x.com/PurgyPengoon', '_blank')}>
-              <span className="text-lg">𝕏</span>
+            <Button aria-label="X" variant="ghost" size="sm" onClick={() => window.open('https://x.com/PurgyPengoon', '_blank')} className="p-1">
+              <span className="text-sm">𝕏</span>
             </Button>
-            <Button aria-label="Telegram" variant="ghost" size="icon" onClick={() => window.open('https://t.me/gooneronabs', '_blank')}>
-              <Send size={16} />
+            <Button aria-label="Telegram" variant="ghost" size="sm" onClick={() => window.open('https://t.me/gooneronabs', '_blank')} className="p-1">
+              <Send size={14} />
             </Button>
-            <Button aria-label="About Gooner" variant="ghost" size="sm" onClick={() => window.open('https://www.purgypengoon.com/', '_blank')} className="flex items-center gap-1 focus:outline-none focus:ring-0">
-              <span className="text-[10px] sm:text-xs">ABOUT</span> <ExternalLink size={14} />
+            <Button aria-label="About Gooner" variant="ghost" size="sm" onClick={() => window.open('https://www.purgypengoon.com/', '_blank')} className="p-1 focus:outline-none focus:ring-0">
+              <ExternalLink size={14} />
             </Button>
           </div>
           {/* Desktop: labeled buttons */}
@@ -410,6 +411,42 @@ const PenguinTap = () => {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Mobile-only leaderboard toggle */}
+      <div className="md:hidden flex justify-center pb-4">
+        <div className="relative">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setShowLeaderboard(!showLeaderboard)}
+            className="flex items-center gap-2 text-sm px-4 py-2"
+          >
+            <Globe size={16} />
+            Global Taps Leaderboard
+            <ChevronDown size={14} className={`transition-transform ${showLeaderboard ? 'rotate-180' : ''}`} />
+          </Button>
+          {showLeaderboard && (
+            <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 z-[9999] bg-card border border-border rounded-lg shadow-2xl w-80 max-h-80 overflow-y-auto" style={{zIndex: 9999}}>
+              <div className="p-4 border-b border-border">
+                <h3 className="font-semibold text-foreground text-base">Country Leaderboard</h3>
+              </div>
+              <div className="py-2">
+                {leaderboard.map((entry, index) => (
+                  <div key={index} className="flex items-center justify-between px-4 py-3 hover:bg-muted/50">
+                    <div className="flex items-center gap-3">
+                      <span className="text-sm font-medium text-muted-foreground">{index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`}</span>
+                      <span className="text-sm font-medium text-foreground">
+                        {entry.country} <span className="ml-2 text-muted-foreground">{entry.countryName}</span>
+                      </span>
+                    </div>
+                    <span className="text-sm font-bold text-primary">{entry.taps.toLocaleString()}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

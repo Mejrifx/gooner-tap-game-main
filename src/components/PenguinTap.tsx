@@ -405,8 +405,8 @@ const PenguinTap = () => {
         <div className="absolute top-4 sm:top-6 md:top-8 left-1/2 -translate-x-1/2 z-10">
           <div className="flex items-center gap-3 sm:gap-6">
             <div className="text-center">
-              <div className="text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground font-bold">Total Goons</div>
-              <div className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-primary font-cartoon ${showPopEffect ? 'pop-animation' : ''}`}>
+              <div className="text-lg sm:text-lg md:text-xl lg:text-2xl text-muted-foreground font-bold">Total Goons</div>
+              <div className={`text-4xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-primary font-cartoon ${showPopEffect ? 'pop-animation' : ''}`}>
                 {globalTaps.toLocaleString()}
               </div>
             </div>
@@ -415,13 +415,13 @@ const PenguinTap = () => {
       </div>
 
       {/* Mobile-only leaderboard toggle */}
-      <div className="md:hidden flex justify-center pb-4">
+      <div className="md:hidden flex justify-center py-6">
         <div className="relative">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setShowLeaderboard(!showLeaderboard)}
-            className="flex items-center gap-2 text-sm px-4 py-2"
+            className="flex items-center gap-2 text-sm px-4 py-2 font-cartoon"
           >
             <Globe size={16} />
             Global Taps Leaderboard

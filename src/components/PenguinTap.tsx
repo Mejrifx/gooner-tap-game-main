@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, Copy, ChevronDown, Send } from 'lucide-react';
+import { ExternalLink, Copy, ChevronDown, Send, Globe } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/lib/supabaseClient';
 
@@ -299,6 +299,7 @@ const PenguinTap = () => {
               onClick={() => setShowLeaderboard(!showLeaderboard)}
               className="flex items-center gap-2 text-sm lg:text-base px-3 lg:px-4 py-2"
             >
+              <Globe size={16} />
               Global Taps Leaderboard
               <ChevronDown size={14} className={`transition-transform ${showLeaderboard ? 'rotate-180' : ''}`} />
             </Button>
@@ -400,7 +401,7 @@ const PenguinTap = () => {
         <div className="absolute top-8 sm:top-12 md:top-16 left-1/2 -translate-x-1/2 z-[60]">
           <div className="flex items-center gap-3 sm:gap-6">
             <div className="text-center">
-              <div className="text-sm sm:text-base md:text-lg text-muted-foreground">Total Taps</div>
+              <div className="text-sm sm:text-base md:text-lg text-muted-foreground font-bold">Total Taps</div>
               <div className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-primary ${showPopEffect ? 'pop-animation' : ''}`}>
                 {globalTaps.toLocaleString()}
               </div>

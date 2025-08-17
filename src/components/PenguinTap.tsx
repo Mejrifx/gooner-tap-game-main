@@ -304,7 +304,7 @@ const PenguinTap = () => {
               <ChevronDown size={14} className={`transition-transform ${showLeaderboard ? 'rotate-180' : ''}`} />
             </Button>
             {showLeaderboard && (
-              <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 z-50 bg-card border border-border rounded-lg shadow-xl w-96 max-h-96 overflow-y-auto">
+              <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 z-[70] bg-card border border-border rounded-lg shadow-xl w-96 max-h-96 overflow-y-auto">
                 <div className="p-4 border-b border-border">
                   <h3 className="font-semibold text-foreground text-base lg:text-lg">Country Leaderboard</h3>
                 </div>
@@ -402,7 +402,7 @@ const PenguinTap = () => {
           <div className="flex items-center gap-3 sm:gap-6">
             <div className="text-center">
               <div className="text-sm sm:text-base md:text-lg text-muted-foreground font-bold">Total Taps</div>
-              <div className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-primary ${showPopEffect ? 'pop-animation' : ''}`}>
+              <div className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-primary font-cartoon ${showPopEffect ? 'pop-animation' : ''}`}>
                 {globalTaps.toLocaleString()}
               </div>
             </div>

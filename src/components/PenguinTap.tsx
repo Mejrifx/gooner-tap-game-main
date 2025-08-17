@@ -208,8 +208,8 @@ const PenguinTap = () => {
 
   const playFrameSound = (frame: 0 | 1) => {
     try {
-      // Use custom audio files based on frame
-      const audioFile = frame === 0 ? '/1.mp3' : '/2.mp3';
+      // Use custom turtle sound audio files based on frame
+      const audioFile = frame === 0 ? '/turtle-sound-1.mp3' : '/turtle-sound-2.mp3';
       const audio = new Audio(audioFile);
       audio.volume = 0.5; // Adjust volume as needed
       audio.play().catch(e => console.log('Audio playback failed:', e));

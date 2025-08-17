@@ -206,28 +206,6 @@ const PenguinTap = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [showLeaderboard]);
 
-  // Preload audio on component mount and first user interaction
-  useEffect(() => {
-    // Try to initialize audio immediately
-    const handleFirstInteraction = () => {
-      initializeAudio();
-      // Remove listeners after first interaction
-      document.removeEventListener('touchstart', handleFirstInteraction);
-      document.removeEventListener('click', handleFirstInteraction);
-    };
-
-    // Add listeners for first user interaction (required for mobile)
-    document.addEventListener('touchstart', handleFirstInteraction, { passive: true });
-    document.addEventListener('click', handleFirstInteraction);
-
-    return () => {
-      document.removeEventListener('touchstart', handleFirstInteraction);
-      document.removeEventListener('click', handleFirstInteraction);
-    };
-  }, [initializeAudio]);
-
-  
-
   const pressActiveRef = useRef<boolean>(false);
 
   // Initialize audio pool for instant playback
@@ -251,6 +229,26 @@ const PenguinTap = () => {
     
     audioInitialized.current = true;
   }, []);
+
+  // Preload audio on component mount and first user interaction
+  useEffect(() => {
+    // Try to initialize audio immediately
+    const handleFirstInteraction = () => {
+      initializeAudio();
+      // Remove listeners after first interaction
+      document.removeEventListener('touchstart', handleFirstInteraction);
+      document.removeEventListener('click', handleFirstInteraction);
+    };
+
+    // Add listeners for first user interaction (required for mobile)
+    document.addEventListener('touchstart', handleFirstInteraction, { passive: true });
+    document.addEventListener('click', handleFirstInteraction);
+
+    return () => {
+      document.removeEventListener('touchstart', handleFirstInteraction);
+      document.removeEventListener('click', handleFirstInteraction);
+    };
+  }, [initializeAudio]);
 
   const playFrameSound = (frame: 0 | 1) => {
     try {

@@ -307,7 +307,7 @@ const PenguinTap = () => {
               <ChevronDown size={14} className={`transition-transform ${showLeaderboard ? 'rotate-180' : ''}`} />
             </Button>
             {showLeaderboard && (
-              <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 z-[999] bg-card border border-border rounded-lg shadow-xl w-96 max-h-96 overflow-y-auto">
+              <div className="absolute top-full mt-2 left-1/2 -translate-x-1/2 z-[9999] bg-card border border-border rounded-lg shadow-2xl w-96 max-h-96 overflow-y-auto" style={{zIndex: 9999}}>
                 <div className="p-4 border-b border-border">
                   <h3 className="font-semibold text-foreground text-base lg:text-lg">Country Leaderboard</h3>
                 </div>
@@ -401,7 +401,7 @@ const PenguinTap = () => {
           })()}
         </div>
         {/* Top overlay above the image: total taps */}
-        <div className="absolute top-4 sm:top-6 md:top-8 left-1/2 -translate-x-1/2 z-[60]">
+        <div className="absolute top-4 sm:top-6 md:top-8 left-1/2 -translate-x-1/2 z-10">
           <div className="flex items-center gap-3 sm:gap-6">
             <div className="text-center">
               <div className="text-base sm:text-lg md:text-xl lg:text-2xl text-muted-foreground font-bold">Total Goons</div>

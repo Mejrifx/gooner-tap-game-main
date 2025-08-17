@@ -397,11 +397,11 @@ const PenguinTap = () => {
           })()}
         </div>
         {/* Top overlay above the image: total taps */}
-        <div className="absolute top-2 sm:top-4 left-1/2 -translate-x-1/2 z-[60]">
+        <div className="absolute top-8 sm:top-12 md:top-16 left-1/2 -translate-x-1/2 z-[60]">
           <div className="flex items-center gap-3 sm:gap-6">
             <div className="text-center">
-              <div className="text-xs sm:text-sm md:text-base text-muted-foreground">Total Taps</div>
-              <div className={`text-xl sm:text-2xl md:text-3xl font-extrabold text-primary ${showPopEffect ? 'pop-animation' : ''}`}>
+              <div className="text-sm sm:text-base md:text-lg text-muted-foreground">Total Taps</div>
+              <div className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-primary ${showPopEffect ? 'pop-animation' : ''}`}>
                 {globalTaps.toLocaleString()}
               </div>
             </div>

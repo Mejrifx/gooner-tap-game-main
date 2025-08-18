@@ -14,10 +14,6 @@ const PenguinTap = () => {
   const countryCodeRef = useRef<string>('');
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const mobileLeaderboardRef = useRef<HTMLDivElement>(null);
-  
-  // Audio preloading for instant mobile playback
-  const audioPool = useRef<{ [key: string]: HTMLAudioElement[] }>({});
-  const audioInitialized = useRef(false);
   const [leaderboard, setLeaderboard] = useState<{ country: string; countryName: string; taps: number }[]>([]);
   const { toast } = useToast();
 
@@ -208,76 +204,13 @@ const PenguinTap = () => {
 
   const pressActiveRef = useRef<boolean>(false);
 
-  // Initialize audio pool for instant playback
-  const initializeAudio = useCallback(() => {
-    if (audioInitialized.current) return;
-    
-    const audioFiles = ['/turtle-sound-1.mp3', '/turtle-sound-2.mp3'];
-    
-    audioFiles.forEach(file => {
-      audioPool.current[file] = [];
-      // Create multiple instances for rapid successive taps
-      for (let i = 0; i < 3; i++) {
-        const audio = new Audio(file);
-        audio.preload = 'auto';
-        audio.volume = 0.5;
-        // Load the audio file
-        audio.load();
-        audioPool.current[file].push(audio);
-      }
-    });
-    
-    audioInitialized.current = true;
-  }, []);
-
-  // Preload audio on component mount and first user interaction
-  useEffect(() => {
-    // Try to initialize audio immediately
-    const handleFirstInteraction = () => {
-      initializeAudio();
-      // Remove listeners after first interaction
-      document.removeEventListener('touchstart', handleFirstInteraction);
-      document.removeEventListener('click', handleFirstInteraction);
-    };
-
-    // Add listeners for first user interaction (required for mobile)
-    document.addEventListener('touchstart', handleFirstInteraction, { passive: true });
-    document.addEventListener('click', handleFirstInteraction);
-
-    return () => {
-      document.removeEventListener('touchstart', handleFirstInteraction);
-      document.removeEventListener('click', handleFirstInteraction);
-    };
-  }, [initializeAudio]);
-
   const playFrameSound = (frame: 0 | 1) => {
     try {
-      // Initialize audio on first tap if not already done
-      if (!audioInitialized.current) {
-        initializeAudio();
-      }
-      
-      // Use preloaded audio from pool for instant playback
+      // Use custom turtle sound audio files based on frame
       const audioFile = frame === 0 ? '/turtle-sound-1.mp3' : '/turtle-sound-2.mp3';
-      const audioInstances = audioPool.current[audioFile];
-      
-      if (audioInstances && audioInstances.length > 0) {
-        // Find an available (not playing) audio instance
-        let availableAudio = audioInstances.find(audio => audio.paused);
-        
-        // If all instances are playing, use the first one (will restart it)
-        if (!availableAudio) {
-          availableAudio = audioInstances[0];
-          availableAudio.currentTime = 0; // Reset to beginning
-        }
-        
-        availableAudio.play().catch(e => console.log('Audio playback failed:', e));
-      } else {
-        // Fallback to creating new audio if pool isn't ready
-        const audio = new Audio(audioFile);
-        audio.volume = 0.5;
-        audio.play().catch(e => console.log('Audio playback failed:', e));
-      }
+      const audio = new Audio(audioFile);
+      audio.volume = 0.5; // Adjust volume as needed
+      audio.play().catch(e => console.log('Audio playback failed:', e));
     } catch (e) {
       console.log('Audio not supported');
     }

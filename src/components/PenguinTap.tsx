@@ -29,8 +29,16 @@ const PenguinTap = () => {
       return '🌍'; // World emoji for unknown regions
     }
     
+    const upperCC = cc.toUpperCase();
+    
+    // Handle known invalid country codes
+    const invalidCodes = ['ZZ', 'XX', 'AA', '00', '  '];
+    if (invalidCodes.includes(upperCC)) {
+      return '🌍';
+    }
+    
     try {
-      return cc.toUpperCase().replace(/./g, (char) => String.fromCodePoint(127397 + char.charCodeAt()));
+      return upperCC.replace(/./g, (char) => String.fromCodePoint(127397 + char.charCodeAt()));
     } catch {
       return '🌍'; // Fallback to world emoji
     }
@@ -46,6 +54,12 @@ const PenguinTap = () => {
       }
       
       const upperCC = cc.toUpperCase();
+      
+      // Handle known invalid country codes
+      const invalidCodes = ['ZZ', 'XX', 'AA', '00', '  '];
+      if (invalidCodes.includes(upperCC)) {
+        return 'Unknown Region';
+      }
       
       // Try to get the display name
       if (countryDisplay) {

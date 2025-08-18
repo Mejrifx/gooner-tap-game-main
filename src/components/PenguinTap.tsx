@@ -23,15 +23,66 @@ const PenguinTap = () => {
   // Supabase-driven global taps
   const [globalTaps, setGlobalTaps] = useState<number>(0);
 
-  const countryCodeToFlag = (cc: string) => cc.toUpperCase().replace(/./g, (char) => String.fromCodePoint(127397 + char.charCodeAt()));
+  const countryCodeToFlag = (cc: string) => {
+    // Handle empty or invalid country codes
+    if (!cc || cc.length !== 2) {
+      return '🌍'; // World emoji for unknown regions
+    }
+    
+    try {
+      return cc.toUpperCase().replace(/./g, (char) => String.fromCodePoint(127397 + char.charCodeAt()));
+    } catch {
+      return '🌍'; // Fallback to world emoji
+    }
+  };
   const countryDisplay = typeof (Intl as any).DisplayNames === 'function'
     ? new (Intl as any).DisplayNames(['en'], { type: 'region' })
     : null;
   const getCountryName = (cc: string) => {
     try {
-      return countryDisplay ? countryDisplay.of(cc.toUpperCase()) : cc.toUpperCase();
+      // Handle empty or invalid country codes
+      if (!cc || cc.length !== 2) {
+        return 'Unknown Region';
+      }
+      
+      const upperCC = cc.toUpperCase();
+      
+      // Try to get the display name
+      if (countryDisplay) {
+        const displayName = countryDisplay.of(upperCC);
+        // If DisplayNames returns the code itself, it's likely invalid
+        if (displayName && displayName !== upperCC) {
+          return displayName;
+        }
+      }
+      
+      // Fallback for common codes that might not be in DisplayNames
+      const commonCountries: { [key: string]: string } = {
+        'US': 'United States',
+        'GB': 'United Kingdom',
+        'CA': 'Canada',
+        'AU': 'Australia',
+        'DE': 'Germany',
+        'FR': 'France',
+        'JP': 'Japan',
+        'CN': 'China',
+        'IN': 'India',
+        'BR': 'Brazil',
+        'RU': 'Russia',
+        'IT': 'Italy',
+        'ES': 'Spain',
+        'MX': 'Mexico',
+        'KR': 'South Korea',
+        'NL': 'Netherlands',
+        'SE': 'Sweden',
+        'NO': 'Norway',
+        'DK': 'Denmark',
+        'FI': 'Finland'
+      };
+      
+      return commonCountries[upperCC] || 'Unknown Region';
     } catch {
-      return cc.toUpperCase();
+      return 'Unknown Region';
     }
   };
 

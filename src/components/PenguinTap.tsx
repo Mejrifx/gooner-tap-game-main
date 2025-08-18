@@ -206,14 +206,24 @@ const PenguinTap = () => {
 
   const playFrameSound = (frame: 0 | 1) => {
     try {
-      // Use custom turtle sound audio files based on frame
-      const audioFile = frame === 0 ? '/turtle-sound-1.mp3' : '/turtle-sound-2.mp3';
-      const audio = new Audio(audioFile);
-      audio.volume = 0.5; // Adjust volume as needed
-      audio.play().catch(e => console.log('Audio playback failed:', e));
-    } catch (e) {
-      console.log('Audio not supported');
-    }
+      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      const startHz = frame === 0 ? 800 : 950;
+      const endHz = frame === 0 ? 400 : 550;
+      
+      oscillator.frequency.setValueAtTime(startHz, audioContext.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(endHz, audioContext.currentTime + 0.12);
+      gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.12);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.12);
+    } catch {}
   };
 
   const handlePressStart = useCallback(() => {

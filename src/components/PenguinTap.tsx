@@ -554,19 +554,8 @@ const PenguinTap = () => {
           })()}
             </div>
 
-        {/* CMC Logo */}
-        <div className="absolute top-3 sm:top-2 md:top-3 left-1/2 -translate-x-1/2 z-10">
-          <img 
-            src={cmcLogo}
-            alt="View on CoinMarketCap" 
-            className="h-10 w-auto md:h-12 md:w-auto cursor-pointer transition-all duration-200 hover:scale-105 hover:drop-shadow-xl object-contain"
-            onClick={() => window.open('https://coinmarketcap.com/currencies/purgy-pengoon', '_blank')}
-            title="View GOONER on CoinMarketCap"
-          />
-        </div>
-        
         {/* Top overlay above the image: total taps */}
-        <div className="absolute top-16 sm:top-12 md:top-16 left-1/2 -translate-x-1/2 z-10">
+        <div className="absolute top-3 sm:top-2 md:top-3 left-1/2 -translate-x-1/2 z-10">
           <div className="flex items-center gap-3 sm:gap-6">
             <div className="text-center">
               <div className="text-base sm:text-base md:text-lg lg:text-xl text-muted-foreground font-bold">Total Goons</div>
@@ -576,6 +565,17 @@ const PenguinTap = () => {
             </div>
           </div>
           </div>
+
+        {/* CMC Logo */}
+        <div className="absolute top-16 sm:top-12 md:top-16 left-1/2 -translate-x-1/2 z-10">
+          <img 
+            src={cmcLogo}
+            alt="View on CoinMarketCap" 
+            className="h-10 w-auto md:h-12 md:w-auto cursor-pointer transition-all duration-200 hover:scale-105 hover:drop-shadow-xl object-contain"
+            onClick={() => window.open('https://coinmarketcap.com/currencies/purgy-pengoon', '_blank')}
+            title="View GOONER on CoinMarketCap"
+          />
+        </div>
           
         {/* Mobile-only leaderboard toggle */}
         <div className="md:hidden absolute bottom-32 left-1/2 -translate-x-1/2 z-20">

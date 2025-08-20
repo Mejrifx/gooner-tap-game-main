@@ -1,8 +1,10 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, Copy, ChevronDown, Send, Globe } from 'lucide-react';
+import { ExternalLink, Copy, ChevronDown, Send, Globe, Shield } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/lib/supabaseClient';
+import { ConsentModal } from './ConsentModal';
+import { ConsentManager } from '@/lib/consentManager';
 
 const PenguinTap = () => {
   const [pops, setPops] = useState(0);
@@ -15,6 +17,7 @@ const PenguinTap = () => {
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const mobileLeaderboardRef = useRef<HTMLDivElement>(null);
   const [leaderboard, setLeaderboard] = useState<{ country: string; countryName: string; taps: number }[]>([]);
+  const [showConsentModal, setShowConsentModal] = useState(false);
   const { toast } = useToast();
 
   // Placeholder CA for GOONER token
@@ -124,16 +127,23 @@ const PenguinTap = () => {
     }, 300);
   }, [flushIncrements]);
 
-  // Initialize geolocation for country flag (no SW registration in prod to avoid stale caches)
+  // Initialize location detection with consent check
   useEffect(() => {
-    // Get country code and flag based on user's location
+    // Check if user needs to give consent
+    if (ConsentManager.needsConsent()) {
+      setShowConsentModal(true);
+      return;
+    }
+
+    // If user has valid consent, get their location
+    if (ConsentManager.hasValidConsent()) {
     fetch('https://ipapi.co/json/')
-      .then((response) => response.json())
-      .then((data) => {
-        const countryCode = data.country_code as string | undefined;
+        .then((response) => response.json())
+        .then((data) => {
+          const countryCode = data.country_code as string | undefined;
         if (countryCode) {
-          countryCodeRef.current = countryCode.toUpperCase();
-          const flag = countryCodeToFlag(countryCode);
+            countryCodeRef.current = countryCode.toUpperCase();
+            const flag = countryCodeToFlag(countryCode);
           setCountryFlag(flag);
         }
       })
@@ -141,6 +151,11 @@ const PenguinTap = () => {
         // Fallback to world emoji if geolocation fails
         setCountryFlag('🌍');
       });
+    } else {
+      // User declined consent, show as unknown region
+      setCountryFlag('🌍');
+      countryCodeRef.current = '';
+    }
   }, []);
 
   // Load initial counts and subscribe to realtime updates
@@ -291,6 +306,38 @@ const PenguinTap = () => {
     } catch {}
   };
 
+  // Consent modal handlers
+  const handleConsentAccept = useCallback(() => {
+    ConsentManager.setConsent(true);
+    setShowConsentModal(false);
+    
+    // Now fetch location since user consented
+    fetch('https://ipapi.co/json/')
+      .then((response) => response.json())
+      .then((data) => {
+        const countryCode = data.country_code as string | undefined;
+        if (countryCode) {
+          countryCodeRef.current = countryCode.toUpperCase();
+          const flag = countryCodeToFlag(countryCode);
+          setCountryFlag(flag);
+        }
+      })
+      .catch(() => {
+        setCountryFlag('🌍');
+      });
+  }, []);
+
+  const handleConsentDecline = useCallback(() => {
+    ConsentManager.setConsent(false);
+    setShowConsentModal(false);
+    setCountryFlag('🌍');
+    countryCodeRef.current = '';
+  }, []);
+
+  const handlePrivacySettings = useCallback(() => {
+    setShowConsentModal(true);
+  }, []);
+
   const handlePressStart = useCallback(() => {
     if (pressActiveRef.current) return;
     pressActiveRef.current = true;
@@ -377,15 +424,15 @@ const PenguinTap = () => {
           />
           <h1 className="text-xs sm:text-base md:text-xl lg:text-2xl xl:text-3xl font-cartoon font-bold text-primary">
             $GOONER GOONS!
-          </h1>
+        </h1>
         </div>
 
         {/* Center: leaderboard toggle centered on navbar (hidden on mobile) */}
         <div className="hidden md:block absolute left-1/2 -translate-x-1/2 z-[101]">
           <div className="relative leaderboard-container">
-            <Button
-              variant="ghost"
-              size="sm"
+          <Button
+            variant="ghost"
+            size="sm"
               onClick={() => setShowLeaderboard(!showLeaderboard)}
               className="flex items-center gap-2 text-sm lg:text-base px-3 lg:px-4 py-2"
             >
@@ -422,7 +469,7 @@ const PenguinTap = () => {
           {/* Mobile: compact icons only */}
           <div className="flex md:hidden items-center gap-1 flex-nowrap">
             <Button aria-label="Copy CA" variant="ghost" size="sm" onClick={copyCA} className="p-1 focus:outline-none focus:ring-0">
-              <Copy size={14} />
+            <Copy size={14} />
             </Button>
             <Button aria-label="X" variant="ghost" size="sm" onClick={() => window.open('https://x.com/PurgyPengoon', '_blank')} className="p-1">
               <span className="text-sm">𝕏</span>
@@ -432,6 +479,9 @@ const PenguinTap = () => {
             </Button>
             <Button aria-label="About Gooner" variant="ghost" size="sm" onClick={() => window.open('https://www.purgypengoon.com/', '_blank')} className="p-1 focus:outline-none focus:ring-0">
               <ExternalLink size={14} />
+            </Button>
+            <Button aria-label="Privacy Settings" variant="ghost" size="sm" onClick={handlePrivacySettings} className="p-1 focus:outline-none focus:ring-0">
+              <Shield size={14} />
             </Button>
           </div>
           {/* Desktop: labeled buttons */}
@@ -448,6 +498,9 @@ const PenguinTap = () => {
             <Button variant="ghost" size="sm" onClick={() => window.open('https://www.purgypengoon.com/', '_blank')} className="flex items-center gap-1 focus:outline-none focus:ring-0">
               <span>ABOUT GOONER</span> <ExternalLink size={14} />
           </Button>
+            <Button variant="ghost" size="sm" onClick={handlePrivacySettings} className="flex items-center gap-1 focus:outline-none focus:ring-0">
+              <Shield size={14} /> <span>PRIVACY</span>
+            </Button>
           </div>
         </div>
       </nav>
@@ -494,45 +547,45 @@ const PenguinTap = () => {
               <div className="text-lg sm:text-lg md:text-xl lg:text-2xl text-muted-foreground font-bold">Total Goons</div>
               <div className={`text-4xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-primary font-cartoon ${showPopEffect ? 'pop-animation' : ''}`}>
                 {globalTaps.toLocaleString()}
-              </div>
+      </div>
             </div>
           </div>
-        </div>
-
+          </div>
+          
         {/* Mobile-only leaderboard toggle */}
         <div className="md:hidden absolute bottom-20 left-1/2 -translate-x-1/2 z-20">
           <div className="relative" ref={mobileLeaderboardRef}>
-          <Button
-            variant="outline"
-            size="sm"
+            <Button
+              variant="outline"
+              size="sm"
             aria-label="Global Leaderboard Toggle"
-            onClick={() => setShowLeaderboard(!showLeaderboard)}
+              onClick={() => setShowLeaderboard(!showLeaderboard)}
             className="flex items-center gap-2 text-sm px-4 py-2 font-cartoon bg-card/80 border-primary/20 hover:bg-primary/10"
-          >
+            >
             <Globe size={16} />
             Global Taps Leaderboard
             <ChevronDown size={14} className={`transition-transform ${showLeaderboard ? '' : 'rotate-180'}`} />
-          </Button>
-          {showLeaderboard && (
+            </Button>
+            {showLeaderboard && (
             <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 z-[9999] bg-card border border-border rounded-lg shadow-2xl w-80 max-h-80 overflow-y-auto" style={{zIndex: 9999}}>
               <div className="p-4 border-b border-border">
                 <h3 className="font-semibold text-foreground text-base">Country Leaderboard</h3>
-              </div>
-              <div className="py-2">
-                {leaderboard.map((entry, index) => (
+                </div>
+                <div className="py-2">
+                  {leaderboard.map((entry, index) => (
                   <div key={index} className="flex items-center justify-between px-4 py-3 hover:bg-muted/50">
                     <div className="flex items-center gap-3">
                       <span className="text-sm font-medium text-muted-foreground">{index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`}</span>
                       <span className="text-sm font-medium text-foreground">
                         {entry.country} <span className="ml-2 text-muted-foreground">{entry.countryName}</span>
                       </span>
+                      </div>
+                      <span className="text-sm font-bold text-primary">{entry.taps.toLocaleString()}</span>
                     </div>
-                    <span className="text-sm font-bold text-primary">{entry.taps.toLocaleString()}</span>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            )}
           </div>
         </div>
       </div>
@@ -549,6 +602,13 @@ const PenguinTap = () => {
         }
       };
       */}
+
+      {/* Consent Modal */}
+      <ConsentModal
+        isOpen={showConsentModal}
+        onAccept={handleConsentAccept}
+        onDecline={handleConsentDecline}
+      />
     </div>
   );
 };

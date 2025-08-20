@@ -559,7 +559,7 @@ const PenguinTap = () => {
           <img 
             src={cmcLogo}
             alt="View on CoinMarketCap" 
-            className="h-12 w-auto md:h-16 md:w-auto cursor-pointer transition-all duration-200 hover:scale-105 hover:drop-shadow-xl object-contain"
+            className="h-10 w-auto md:h-12 md:w-auto cursor-pointer transition-all duration-200 hover:scale-105 hover:drop-shadow-xl object-contain"
             onClick={() => window.open('https://coinmarketcap.com/currencies/purgy-pengoon', '_blank')}
             title="View GOONER on CoinMarketCap"
           />
@@ -569,8 +569,8 @@ const PenguinTap = () => {
         <div className="absolute top-20 sm:top-16 md:top-20 left-1/2 -translate-x-1/2 z-10">
           <div className="flex items-center gap-3 sm:gap-6">
             <div className="text-center">
-              <div className="text-lg sm:text-lg md:text-xl lg:text-2xl text-muted-foreground font-bold">Total Goons</div>
-              <div className={`text-4xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-primary font-cartoon ${showPopEffect ? 'pop-animation' : ''}`}>
+              <div className="text-base sm:text-base md:text-lg lg:text-xl text-muted-foreground font-bold">Total Goons</div>
+              <div className={`text-3xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold text-primary font-cartoon ${showPopEffect ? 'pop-animation' : ''}`}>
                 {globalTaps.toLocaleString()}
       </div>
             </div>

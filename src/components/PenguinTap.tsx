@@ -553,24 +553,15 @@ const PenguinTap = () => {
           })()}
         </div>
         
-        {/* CMC Listing Button */}
+        {/* CMC Logo */}
         <div className="absolute top-4 sm:top-2 md:top-4 left-1/2 -translate-x-1/2 z-10">
-          <button
+          <img 
+            src="/cmc-logo.png" 
+            alt="View on CoinMarketCap" 
+            className="h-8 w-8 md:h-10 md:w-10 cursor-pointer transition-all duration-200 hover:scale-110 hover:drop-shadow-lg"
             onClick={() => window.open('https://coinmarketcap.com/currencies/purgy-pengoon', '_blank')}
-            className="px-3 py-2 md:px-4 md:py-3 bg-white hover:bg-gray-50 border border-gray-200 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 glow-effect"
-            title="View on CoinMarketCap"
-          >
-            <div className="flex items-center gap-2">
-              <img 
-                src="/cmc-logo.png" 
-                alt="CoinMarketCap" 
-                className="h-5 w-5 md:h-6 md:w-6"
-              />
-              <span className="font-cartoon font-bold text-xs md:text-sm text-gray-800">
-                LISTED
-              </span>
-            </div>
-          </button>
+            title="View GOONER on CoinMarketCap"
+          />
         </div>
         
         {/* Top overlay above the image: total taps */}

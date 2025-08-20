@@ -567,7 +567,7 @@ const PenguinTap = () => {
           </div>
 
         {/* CMC Logo */}
-        <div className="absolute top-16 sm:top-12 md:top-16 left-1/2 -translate-x-1/2 z-10">
+        <div className="absolute top-24 sm:top-20 md:top-24 left-1/2 -translate-x-1/2 z-10">
           <img 
             src={cmcLogo}
             alt="View on CoinMarketCap" 

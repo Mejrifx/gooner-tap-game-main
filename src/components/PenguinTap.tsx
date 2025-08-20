@@ -565,7 +565,7 @@ const PenguinTap = () => {
           </div>
           
         {/* Mobile-only leaderboard toggle */}
-        <div className="md:hidden absolute bottom-20 left-1/2 -translate-x-1/2 z-20">
+        <div className="md:hidden absolute bottom-32 left-1/2 -translate-x-1/2 z-20">
           <div className="relative" ref={mobileLeaderboardRef}>
             <Button
               variant="outline"

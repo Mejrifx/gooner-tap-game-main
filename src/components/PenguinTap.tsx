@@ -557,10 +557,19 @@ const PenguinTap = () => {
         <div className="absolute top-4 sm:top-2 md:top-4 left-1/2 -translate-x-1/2 z-10">
           <button
             onClick={() => window.open('https://coinmarketcap.com/currencies/purgy-pengoon', '_blank')}
-            className="px-3 py-1.5 md:px-4 md:py-2 bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-white font-cartoon font-bold text-xs md:text-sm rounded-full shadow-lg hover:shadow-xl transition-all duration-200 transform hover:scale-105 animate-pulse"
+            className="px-3 py-2 md:px-4 md:py-3 bg-white hover:bg-gray-50 border border-gray-200 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:scale-105 glow-effect"
             title="View on CoinMarketCap"
           >
-            🚀 CMC LISTED! 🚀
+            <div className="flex items-center gap-2">
+              <img 
+                src="/cmc-logo.png" 
+                alt="CoinMarketCap" 
+                className="h-5 w-5 md:h-6 md:w-6"
+              />
+              <span className="font-cartoon font-bold text-xs md:text-sm text-gray-800">
+                LISTED
+              </span>
+            </div>
           </button>
         </div>
         

@@ -555,13 +555,26 @@ const PenguinTap = () => {
 
         {/* CMC Logo */}
         <div className="absolute top-4 sm:top-2 md:top-4 left-1/2 -translate-x-1/2 z-10">
-          <img 
-            src="/cmc-logo.png" 
-            alt="View on CoinMarketCap" 
-            className="h-8 w-8 md:h-10 md:w-10 cursor-pointer transition-all duration-200 hover:scale-110 hover:drop-shadow-lg"
+          <div 
+            className="h-8 w-8 md:h-10 md:w-10 cursor-pointer transition-all duration-200 hover:scale-110 hover:drop-shadow-lg bg-white rounded-lg border border-gray-200 flex items-center justify-center"
             onClick={() => window.open('https://coinmarketcap.com/currencies/purgy-pengoon', '_blank')}
             title="View GOONER on CoinMarketCap"
-          />
+          >
+            <img 
+              src={`/cmc-logo.png?v=${Date.now()}`}
+              alt="CMC" 
+              className="h-6 w-6 md:h-8 md:w-8 object-contain"
+              onError={(e) => {
+                console.error('CMC logo failed to load, showing fallback');
+                const target = e.target as HTMLImageElement;
+                target.style.display = 'none';
+                const parent = target.parentElement;
+                if (parent) {
+                  parent.innerHTML = '<span class="text-xs font-bold text-blue-600">CMC</span>';
+                }
+              }}
+            />
+          </div>
         </div>
         
         {/* Top overlay above the image: total taps */}

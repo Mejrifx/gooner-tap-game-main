@@ -555,11 +555,11 @@ const PenguinTap = () => {
             </div>
 
         {/* CMC Logo */}
-        <div className="absolute top-4 sm:top-2 md:top-4 left-1/2 -translate-x-1/2 z-10">
+        <div className="absolute top-1 sm:top-0 md:top-1 left-1/2 -translate-x-1/2 z-10">
           <img 
             src={cmcLogo}
             alt="View on CoinMarketCap" 
-            className="h-16 w-auto md:h-20 md:w-auto cursor-pointer transition-all duration-200 hover:scale-105 hover:drop-shadow-xl object-contain"
+            className="h-12 w-auto md:h-16 md:w-auto cursor-pointer transition-all duration-200 hover:scale-105 hover:drop-shadow-xl object-contain"
             onClick={() => window.open('https://coinmarketcap.com/currencies/purgy-pengoon', '_blank')}
             title="View GOONER on CoinMarketCap"
           />

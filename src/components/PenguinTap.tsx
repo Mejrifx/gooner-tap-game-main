@@ -566,7 +566,7 @@ const PenguinTap = () => {
         </div>
         
         {/* Top overlay above the image: total taps */}
-        <div className="absolute top-20 sm:top-16 md:top-20 left-1/2 -translate-x-1/2 z-10">
+        <div className="absolute top-16 sm:top-12 md:top-16 left-1/2 -translate-x-1/2 z-10">
           <div className="flex items-center gap-3 sm:gap-6">
             <div className="text-center">
               <div className="text-base sm:text-base md:text-lg lg:text-xl text-muted-foreground font-bold">Total Goons</div>

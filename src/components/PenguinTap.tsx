@@ -425,6 +425,18 @@ const PenguinTap = () => {
           <h1 className="text-xs sm:text-base md:text-xl lg:text-2xl xl:text-3xl font-cartoon font-bold text-primary">
             $GOONER GOONS!
         </h1>
+          {/* Desktop: CA display next to title */}
+          <div className="hidden md:block ml-4 lg:ml-6">
+            <button
+              onClick={copyCA}
+              className="px-2 py-1 lg:px-3 lg:py-1 bg-primary/10 hover:bg-primary/20 border border-primary/30 rounded-lg transition-colors duration-200 group"
+              title="Click to copy Contract Address"
+            >
+              <span className="text-xs lg:text-sm font-cartoon font-semibold text-primary group-hover:text-primary/80">
+                CA: {CONTRACT_ADDRESS.slice(0, 6)}...{CONTRACT_ADDRESS.slice(-4)}
+              </span>
+            </button>
+          </div>
         </div>
 
         {/* Center: leaderboard toggle centered on navbar (hidden on mobile) */}
@@ -587,6 +599,22 @@ const PenguinTap = () => {
               </div>
             )}
           </div>
+        </div>
+
+        {/* Mobile-only CA display */}
+        <div className="md:hidden absolute bottom-8 left-1/2 -translate-x-1/2 z-20">
+          <button
+            onClick={copyCA}
+            className="px-4 py-2 bg-primary/15 hover:bg-primary/25 border border-primary/40 rounded-lg transition-colors duration-200 group"
+            title="Click to copy Contract Address"
+          >
+            <div className="text-center">
+              <div className="text-xs font-cartoon font-semibold text-primary/80 mb-1">CONTRACT ADDRESS</div>
+              <div className="text-sm font-cartoon font-bold text-primary group-hover:text-primary/80">
+                {CONTRACT_ADDRESS.slice(0, 8)}...{CONTRACT_ADDRESS.slice(-6)}
+              </div>
+            </div>
+          </button>
         </div>
       </div>
 

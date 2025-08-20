@@ -552,7 +552,7 @@ const PenguinTap = () => {
               </>
             );
           })()}
-            </div>
+        </div>
 
         {/* Top overlay above the image: total taps */}
         <div className="absolute top-3 sm:top-2 md:top-3 left-1/2 -translate-x-1/2 z-10">
@@ -567,7 +567,7 @@ const PenguinTap = () => {
           </div>
 
         {/* CMC Logo */}
-        <div className="absolute top-24 sm:top-20 md:top-24 left-1/2 -translate-x-1/2 z-10">
+        <div className="absolute top-28 sm:top-24 md:top-28 left-1/2 -translate-x-1/2 z-10">
           <img 
             src={cmcLogo}
             alt="View on CoinMarketCap" 
@@ -575,7 +575,7 @@ const PenguinTap = () => {
             onClick={() => window.open('https://coinmarketcap.com/currencies/purgy-pengoon', '_blank')}
             title="View GOONER on CoinMarketCap"
           />
-        </div>
+          </div>
           
         {/* Mobile-only leaderboard toggle */}
         <div className="md:hidden absolute bottom-32 left-1/2 -translate-x-1/2 z-20">

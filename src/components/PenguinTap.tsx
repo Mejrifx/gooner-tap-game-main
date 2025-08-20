@@ -559,7 +559,7 @@ const PenguinTap = () => {
           <img 
             src={cmcLogo}
             alt="View on CoinMarketCap" 
-            className="h-8 w-8 md:h-10 md:w-10 cursor-pointer transition-all duration-200 hover:scale-110 hover:drop-shadow-lg object-contain"
+            className="h-16 w-auto md:h-20 md:w-auto cursor-pointer transition-all duration-200 hover:scale-105 hover:drop-shadow-xl object-contain"
             onClick={() => window.open('https://coinmarketcap.com/currencies/purgy-pengoon', '_blank')}
             title="View GOONER on CoinMarketCap"
           />

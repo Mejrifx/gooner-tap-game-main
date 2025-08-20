@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Shield, MapPin, Database, Eye, Mail, Clock } from "lucide-react";
+import { ArrowLeft, Shield, MapPin, Database, Eye, Clock } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 
 export const PrivacyPolicy: React.FC = () => {
@@ -26,7 +26,7 @@ export const PrivacyPolicy: React.FC = () => {
                 <Shield className="h-8 w-8 text-blue-600" />
                 Privacy Policy
               </h1>
-              <p className="text-gray-600 mt-1">GOONER TapTap Game</p>
+              <p className="text-gray-600 mt-1">$GOONER Goons! (Game)</p>
             </div>
           </div>
 
@@ -41,7 +41,7 @@ export const PrivacyPolicy: React.FC = () => {
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">Introduction</h2>
             <p className="text-gray-700 leading-relaxed">
-              Welcome to GOONER TapTap Game ("we," "our," or "us"). We are committed to protecting your privacy 
+              Welcome to $GOONER Goons! (Game) ("we," "our," or "us"). We are committed to protecting your privacy 
               and being transparent about how we collect, use, and protect your information. This Privacy Policy 
               explains our practices regarding data collection and use when you play our game.
             </p>
@@ -157,27 +157,10 @@ export const PrivacyPolicy: React.FC = () => {
             </p>
           </section>
 
-          {/* Contact Information */}
-          <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <Mail className="h-6 w-6 text-blue-600" />
-              Contact Us
-            </h2>
-            <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-              <p className="text-gray-700 mb-2">
-                If you have any questions about this Privacy Policy or our data practices, please contact us:
-              </p>
-              <ul className="text-gray-600 space-y-1">
-                <li>• Email: privacy@goonertap.game</li>
-                <li>• For data deletion requests: delete@goonertap.game</li>
-              </ul>
-            </div>
-          </section>
-
           {/* Footer */}
           <div className="border-t pt-6 mt-8">
             <p className="text-sm text-gray-500 text-center">
-              By using GOONER TapTap Game, you acknowledge that you have read and understood this Privacy Policy.
+              By using $GOONER Goons! (Game), you acknowledge that you have read and understood this Privacy Policy.
             </p>
           </div>
         </div>
